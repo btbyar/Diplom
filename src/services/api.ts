@@ -1,0 +1,73 @@
+import axios from 'axios';
+import type { User, Booking, Service, Part, LoginRequest, UserCreateInput } from '../types';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Request interceptor to add token
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('auth_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Auth API
+export const authAPI = {
+  login: (credentials: LoginRequest) => api.post('/auth/login', credentials),
+  logout: () => api.post('/auth/logout'),
+  getCurrentUser: () => api.get('/auth/me'),
+};
+
+// Bookings API
+export const bookingsAPI = {
+  getAll: () => api.get<Booking[]>('/bookings'),
+  getById: (id: string) => api.get<Booking>(`/bookings/${id}`),
+  create: (booking: Omit<Booking, 'id' | 'createdAt'>) =>
+    api.post<Booking>('/bookings', booking),
+  update: (id: string, booking: Partial<Booking>) =>
+    api.put<Booking>(`/bookings/${id}`, booking),
+  delete: (id: string) => api.delete(`/bookings/${id}`),
+};
+
+// Services API
+export const servicesAPI = {
+  getAll: () => api.get<Service[]>('/services'),
+  getById: (id: string) => api.get<Service>(`/services/${id}`),
+  create: (service: Omit<Service, 'id' | 'createdAt'>) =>
+    api.post<Service>('/services', service),
+  update: (id: string, service: Partial<Service>) =>
+    api.put<Service>(`/services/${id}`, service),
+  delete: (id: string) => api.delete(`/services/${id}`),
+};
+
+// Parts (inventory) API
+export const partsAPI = {
+  getAll: () => api.get<Part[]>('/parts'),
+  getById: (id: string) => api.get<Part>(`/parts/${id}`),
+  create: (part: Omit<Part, '_id' | 'id' | 'createdAt' | 'updatedAt'>) =>
+    api.post<Part>('/parts', part),
+  update: (id: string, part: Partial<Part>) =>
+    api.put<Part>(`/parts/${id}`, part),
+  delete: (id: string) => api.delete(`/parts/${id}`),
+};
+
+// Users API
+export const usersAPI = {
+  getAll: () => api.get<User[]>('/users'),
+  getById: (id: string) => api.get<User>(`/users/${id}`),
+  create: (user: UserCreateInput) =>
+    api.post<User>('/users', user),
+  update: (id: string, user: Partial<User>) =>
+    api.put<User>(`/users/${id}`, user),
+  delete: (id: string) => api.delete(`/users/${id}`),
+};
+
+export default api;
