@@ -21,7 +21,7 @@ import '../styles/Button.css';
 export const AdminDashboard = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  
+
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [users, setUsers] = useState<User[]>([]);
@@ -91,9 +91,9 @@ export const AdminDashboard = () => {
 
   const recentBookingsColumns = [
     { key: 'id' as const, label: 'ID' },
-    { key: 'date' as const, label: 'Date' },
-    { key: 'time' as const, label: 'Time' },
-    { key: 'brand' as const, label: 'Brand' },
+    { key: 'date' as const, label: 'Огноо' },
+    { key: 'time' as const, label: 'Цаг' },
+    { key: 'brand' as const, label: 'Марк' },
   ];
 
   const recentBookings = bookings.slice(0, 5);
@@ -104,7 +104,7 @@ export const AdminDashboard = () => {
     <div className="admin-layout">
       <Sidebar />
       <div className="admin-layout-content">
-        <TopBar title="Dashboard" />
+        <TopBar title="Хянах самбар" />
         <main className="admin-main">
           {error && (
             <Card>
@@ -138,10 +138,10 @@ export const AdminDashboard = () => {
               />
               <div className="flex-between mt-4">
                 <span className="text-muted text-sm">
-                  {recentBookings.length} of {bookings.length} bookings shown
+                  {recentBookings.length} / {bookings.length} харагдаж байна
                 </span>
-                <Button 
-                  variant="secondary" 
+                <Button
+                  variant="secondary"
                   size="sm"
                   onClick={() => navigate('/admin/bookings')}
                 >
@@ -158,9 +158,9 @@ export const AdminDashboard = () => {
                     key={service.id || service._id}
                     className="flex-between p-3"
                     style={{
-                      background: 'rgba(0, 212, 255, 0.05)',
+                      background: 'rgba(255, 255, 255, 0.02)',
                       borderRadius: '8px',
-                      border: '1px solid rgba(0, 212, 255, 0.1)',
+                      border: '1px solid #333b4d',
                     }}
                   >
                     <div>
@@ -194,9 +194,9 @@ export const AdminDashboard = () => {
                   key={u.id || u._id}
                   className="p-3"
                   style={{
-                    background: 'rgba(0, 212, 255, 0.05)',
+                    background: 'rgba(255, 255, 255, 0.02)',
                     borderRadius: '8px',
-                    border: '1px solid rgba(0, 212, 255, 0.1)',
+                    border: '1px solid #333b4d',
                   }}
                 >
                   <div className="flex-center gap-md mb-2">
@@ -205,7 +205,7 @@ export const AdminDashboard = () => {
                         width: '40px',
                         height: '40px',
                         borderRadius: '50%',
-                        background: 'linear-gradient(135deg, #00d4ff, #0099ff)',
+                        background: '#3e82f7',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -221,7 +221,7 @@ export const AdminDashboard = () => {
                     </div>
                   </div>
                   <p className="text-sm text-muted">
-                    Role: <span className="font-semibold">{u.role}</span>
+                    Эрх: <span className="font-semibold">{u.role === 'admin' ? 'Админ' : 'Хэрэглэгч'}</span>
                   </p>
                 </div>
               ))}

@@ -70,7 +70,7 @@ export const AnalyticsPage = () => {
     <div className="admin-layout">
       <Sidebar />
       <div className="admin-layout-content">
-        <TopBar title="Analytics & Reports" />
+        <TopBar title="Анализ ба Тайлан" />
         <main className="admin-main">
           {error && (
             <Card>
@@ -82,28 +82,28 @@ export const AnalyticsPage = () => {
           <div className="grid grid-4 mb-6">
             <StatCard
               icon={<FiCalendar size={32} />}
-              title="Total Bookings"
+              title="Нийт захиалга"
               value={totalBookings}
               change={12}
               color="primary"
             />
             <StatCard
               icon={<FiDollarSign size={32} />}
-              title="Total Revenue"
-              value={`$${totalRevenue.toFixed(2)}`}
+              title="Нийт орлого"
+              value={`₮${totalRevenue.toLocaleString()}`}
               change={18}
               color="success"
             />
             <StatCard
               icon={<FiBarChart2 size={32} />}
-              title="Active Services"
+              title="Идэвхтэй үйлчилгээ"
               value={totalServices}
               change={5}
               color="warning"
             />
             <StatCard
               icon={<FiTrendingUp size={32} />}
-              title="Total Users"
+              title="Нийт хэрэглэгч"
               value={totalUsers}
               change={8}
               color="danger"
@@ -113,19 +113,19 @@ export const AnalyticsPage = () => {
           {/* Analytics Cards Grid */}
           <div className="grid grid-2 gap-lg mb-6">
             {/* Booking Status Breakdown */}
-            <Card title="Booking Status Breakdown" className="animate-slide">
+            <Card title="Захиалгын төлөв" className="animate-slide">
               <div className="analytics-breakdown">
                 <div className="breakdown-item">
                   <div className="breakdown-header">
-                    <span className="breakdown-label">Completed</span>
+                    <span className="breakdown-label">Хийгдсэн</span>
                     <span className="breakdown-value" style={{ color: '#22c55e' }}>
                       {completedBookings}
                     </span>
                   </div>
                   <div className="breakdown-bar">
-                    <div 
-                      className="breakdown-progress" 
-                      style={{ 
+                    <div
+                      className="breakdown-progress"
+                      style={{
                         width: `${(completedBookings / totalBookings) * 100}%`,
                         backgroundColor: '#22c55e'
                       }}
@@ -138,15 +138,15 @@ export const AnalyticsPage = () => {
 
                 <div className="breakdown-item">
                   <div className="breakdown-header">
-                    <span className="breakdown-label">Pending</span>
+                    <span className="breakdown-label">Хүлээгдэж буй</span>
                     <span className="breakdown-value" style={{ color: '#f59e0b' }}>
                       {pendingBookings}
                     </span>
                   </div>
                   <div className="breakdown-bar">
-                    <div 
-                      className="breakdown-progress" 
-                      style={{ 
+                    <div
+                      className="breakdown-progress"
+                      style={{
                         width: `${(pendingBookings / totalBookings) * 100}%`,
                         backgroundColor: '#f59e0b'
                       }}
@@ -159,15 +159,15 @@ export const AnalyticsPage = () => {
 
                 <div className="breakdown-item">
                   <div className="breakdown-header">
-                    <span className="breakdown-label">Cancelled</span>
+                    <span className="breakdown-label">Цуцлагдсан</span>
                     <span className="breakdown-value" style={{ color: '#ef4444' }}>
                       {cancelledBookings}
                     </span>
                   </div>
                   <div className="breakdown-bar">
-                    <div 
-                      className="breakdown-progress" 
-                      style={{ 
+                    <div
+                      className="breakdown-progress"
+                      style={{
                         width: `${(cancelledBookings / totalBookings) * 100}%`,
                         backgroundColor: '#ef4444'
                       }}
@@ -181,19 +181,19 @@ export const AnalyticsPage = () => {
             </Card>
 
             {/* User Distribution */}
-            <Card title="User Distribution" className="animate-slide">
+            <Card title="Хэрэглэгчийн бүтэц" className="animate-slide">
               <div className="analytics-breakdown">
                 <div className="breakdown-item">
                   <div className="breakdown-header">
-                    <span className="breakdown-label">Regular Users</span>
+                    <span className="breakdown-label">Энгийн хэрэглэгч</span>
                     <span className="breakdown-value" style={{ color: '#00d4ff' }}>
                       {regularUsers}
                     </span>
                   </div>
                   <div className="breakdown-bar">
-                    <div 
-                      className="breakdown-progress" 
-                      style={{ 
+                    <div
+                      className="breakdown-progress"
+                      style={{
                         width: `${(regularUsers / totalUsers) * 100}%`,
                         backgroundColor: '#00d4ff'
                       }}
@@ -206,15 +206,15 @@ export const AnalyticsPage = () => {
 
                 <div className="breakdown-item">
                   <div className="breakdown-header">
-                    <span className="breakdown-label">Administrators</span>
+                    <span className="breakdown-label">Админ</span>
                     <span className="breakdown-value" style={{ color: '#8b5cf6' }}>
                       {adminUsers}
                     </span>
                   </div>
                   <div className="breakdown-bar">
-                    <div 
-                      className="breakdown-progress" 
-                      style={{ 
+                    <div
+                      className="breakdown-progress"
+                      style={{
                         width: `${(adminUsers / totalUsers) * 100}%`,
                         backgroundColor: '#8b5cf6'
                       }}
@@ -229,24 +229,24 @@ export const AnalyticsPage = () => {
           </div>
 
           {/* Monthly Trends */}
-          <Card title="Monthly Trends" className="animate-slide">
+          <Card title="Сарын хандлага" className="animate-slide">
             <div className="monthly-chart">
               <div className="chart-header">
-                <h4>Bookings & Revenue Over 6 Months</h4>
+                <h4>6 сарын захиалга болон орлого</h4>
               </div>
               <div className="chart-container">
                 {monthlyData.map((data, idx) => (
                   <div key={idx} className="chart-column">
                     <div className="chart-bars">
-                      <div 
-                        className="bar bar-bookings" 
+                      <div
+                        className="bar bar-bookings"
                         style={{ height: `${(data.bookings / 50) * 100}%` }}
-                        title={`${data.bookings} bookings`}
+                        title={`${data.bookings} захиалга`}
                       />
-                      <div 
-                        className="bar bar-revenue" 
+                      <div
+                        className="bar bar-revenue"
                         style={{ height: `${(data.revenue / 5000) * 100}%` }}
-                        title={`$${data.revenue}`}
+                        title={`₮${data.revenue}`}
                       />
                     </div>
                     <span className="chart-label">{data.month}</span>
@@ -256,39 +256,39 @@ export const AnalyticsPage = () => {
               <div className="chart-legend">
                 <div className="legend-item">
                   <div className="legend-color" style={{ backgroundColor: '#00d4ff' }} />
-                  <span>Bookings</span>
+                  <span>Захиалга</span>
                 </div>
                 <div className="legend-item">
                   <div className="legend-color" style={{ backgroundColor: '#8b5cf6' }} />
-                  <span>Revenue ($100s)</span>
+                  <span>Орлого</span>
                 </div>
               </div>
             </div>
           </Card>
 
           {/* Summary Statistics */}
-          <Card title="Summary" className="mt-6 animate-slide">
+          <Card title="Хураангуй" className="mt-6 animate-slide">
             <div className="summary-grid">
               <div className="summary-item">
-                <p className="summary-label">Average Booking Value</p>
+                <p className="summary-label">Дундаж захиалгын дүн</p>
                 <p className="summary-value">
-                  ${totalBookings > 0 ? (totalRevenue / totalBookings).toFixed(2) : '0.00'}
+                  ₮{totalBookings > 0 ? (totalRevenue / totalBookings).toFixed(2) : '0.00'}
                 </p>
               </div>
               <div className="summary-item">
-                <p className="summary-label">Booking Completion Rate</p>
+                <p className="summary-label">Захиалга биелэлтийн хувь</p>
                 <p className="summary-value">
                   {totalBookings > 0 ? ((completedBookings / totalBookings) * 100).toFixed(1) : '0'}%
                 </p>
               </div>
               <div className="summary-item">
-                <p className="summary-label">Avg Services per Booking</p>
+                <p className="summary-label">Нэг захиалга дахь дундаж үйлчилгээ</p>
                 <p className="summary-value">
                   {totalBookings > 0 ? (totalServices / totalBookings).toFixed(2) : '0'}
                 </p>
               </div>
               <div className="summary-item">
-                <p className="summary-label">Users per Service</p>
+                <p className="summary-label">Нэг үйлчилгээний дундаж хэрэглэгч</p>
                 <p className="summary-value">
                   {totalServices > 0 ? (totalUsers / totalServices).toFixed(2) : '0'}
                 </p>

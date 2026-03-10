@@ -52,7 +52,8 @@ bookingRoutes.post('/', async (req: Request, res: Response) => {
     });
 
     await newBooking.save();
-    await newBooking.populate('userId').populate('serviceId');
+    await newBooking.populate('userId');
+    await newBooking.populate('serviceId');
 
     res.status(201).json(newBooking);
   } catch (error: any) {

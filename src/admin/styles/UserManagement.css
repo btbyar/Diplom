@@ -152,6 +152,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -172,6 +173,7 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -193,11 +195,11 @@
   line-height: 1.6;
 }
 
-.form-group {
+.modal .form-group {
   margin-bottom: 20px;
 }
 
-.form-group label {
+.modal .form-group label {
   display: block;
   margin-bottom: 8px;
   color: #f0f0f0;
@@ -466,3 +468,5 @@
   .users-grid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 15px;
+  }
+}

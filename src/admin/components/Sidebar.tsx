@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../store';
-import { FiHome, FiCalendar, FiTool, FiPackage, FiUsers, FiTrendingUp, FiLogOut } from 'react-icons/fi';
+import { FiHome, FiCalendar, FiTool, FiPackage, FiUsers, FiTrendingUp, FiLogOut, FiTruck } from 'react-icons/fi';
 import '../styles/Sidebar.css';
 
 export const Sidebar = () => {
@@ -9,10 +9,11 @@ export const Sidebar = () => {
   const { logout } = useAuthStore();
 
   const menuItems = [
-    { icon: FiHome, label: 'Хянах самбар', path: '/admin' },
-    { icon: FiCalendar, label: 'Захиалгууд', path: '/admin/bookings' },
-    { icon: FiTool, label: 'Үйлчилгээнүүд', path: '/admin/services' },
-    { icon: FiUsers, label: 'Хэрэглэгчид', path: '/admin/users' },
+    { icon: FiHome, label: 'Нүүр', path: '/admin' },
+    { icon: FiCalendar, label: 'Захиалга', path: '/admin/bookings' },
+    { icon: FiTool, label: 'Үйлчилгээ', path: '/admin/services' },
+    { icon: FiUsers, label: 'Хэрэглэгч', path: '/admin/users' },
+    { icon: FiTruck, label: 'Машин', path: '/admin/vehicles' },
     { icon: FiPackage, label: 'Сэлбэг', path: '/admin/parts' },
     { icon: FiTrendingUp, label: 'Анализ ', path: '/admin/analytics' },
   ];
@@ -29,8 +30,7 @@ export const Sidebar = () => {
       <aside className="sidebar">
         <div className="sidebar-header">
           <div className="sidebar-logo">
-            <span className="logo-icon">⚙️</span>
-            <span className="logo-text">AutoCare</span>
+            <span className="logo-text">Xpand</span>
           </div>
         </div>
 
@@ -59,13 +59,13 @@ export const Sidebar = () => {
         </nav>
 
         <div className="sidebar-footer">
-          <button 
+          <button
             className="logout-btn"
             onClick={handleLogout}
-            title="Logout"
+            title="Гарах"
           >
             <span className="icon"><FiLogOut size={18} /></span>
-            <span className="label">Logout</span>
+            <span className="label">Гарах</span>
           </button>
         </div>
       </aside>

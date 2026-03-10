@@ -8,6 +8,7 @@ interface IPart {
   brand?: string;
   price: number;
   quantity: number;
+  imageUrl?: string;
   createdAt: Date;
 }
 
@@ -20,6 +21,7 @@ const partSchema = new Schema<IPart>(
     brand: { type: String, default: 'All brands' },
     price: { type: Number, required: true, min: 0 },
     quantity: { type: Number, required: true, min: 0, default: 0 },
+    imageUrl: { type: String },
   },
   { timestamps: true }
 );

@@ -12,12 +12,12 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #0f3460 0%, #162d5c 100%);
-  color: #e0e6ff;
+  background-color: #f8fafc;
+  color: #334155;
   min-height: 100vh;
 }
 
@@ -32,32 +32,32 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 212, 255, 0.2);
+  background: #cbd5e1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 212, 255, 0.4);
+  background: #94a3b8;
 }
 
 /* Selection */
 ::selection {
-  background: rgba(0, 212, 255, 0.3);
-  color: #e0e6ff;
+  background: #bae6fd;
+  color: #0c4a6e;
 }
 
 ::-moz-selection {
-  background: rgba(0, 212, 255, 0.3);
-  color: #e0e6ff;
+  background: #bae6fd;
+  color: #0c4a6e;
 }
 
 /* Focus styles */
 :focus-visible {
-  outline: 2px solid #00d4ff;
+  outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }
 
@@ -66,7 +66,6 @@ a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid #00d4ff;
+  outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }
-

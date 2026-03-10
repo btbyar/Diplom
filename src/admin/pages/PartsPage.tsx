@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiEdit2, FiPlus, FiTrash2 } from 'react-icons/fi';
+import { FiEdit2, FiImage, FiPlus, FiTrash2 } from 'react-icons/fi';
 import { useAuthStore } from '../../store';
-import { partsAPI } from '../../services/api';
+import { partsAPI, uploadAPI } from '../../services/api';
 import type { Part } from '../../types';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
@@ -12,22 +12,28 @@ import { Table } from '../components/Table';
 import { TopBar } from '../components/TopBar';
 import '../styles/Layout.css';
 
+const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:3000';
+
 export const PartsPage = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [parts, setParts] = useState<Part[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingPart, setEditingPart] = useState<Part | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     partNumber: '',
-    category: 'General',
-    brand: 'All brands',
+    category: 'Ерөнхий',
+    brand: 'Бүх марк',
     price: 0,
     quantity: 0,
     description: '',
+    imageUrl: '',
   });
 
   useEffect(() => {
@@ -49,30 +55,50 @@ export const PartsPage = () => {
 
   const handleAdd = () => {
     setEditingPart(null);
+    setImagePreview(null);
     setFormData({
       name: '',
       partNumber: '',
-      category: 'General',
-      brand: 'All brands',
+      category: 'Ерөнхий',
+      brand: 'Бүх марк',
       price: 0,
       quantity: 0,
       description: '',
+      imageUrl: '',
     });
     setShowModal(true);
   };
 
   const handleEdit = (part: Part) => {
     setEditingPart(part);
+    setImagePreview(part.imageUrl ? `${API_BASE}${part.imageUrl}` : null);
     setFormData({
       name: part.name,
       partNumber: part.partNumber || '',
-      category: part.category || 'General',
-      brand: part.brand || 'All brands',
+      category: part.category || 'Ерөнхий',
+      brand: part.brand || 'Бүх марк',
       price: part.price,
       quantity: part.quantity,
       description: part.description || '',
+      imageUrl: part.imageUrl || '',
     });
     setShowModal(true);
+  };
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const res = await uploadAPI.uploadImage(file);
+      const url = res.data.url;
+      setFormData((prev) => ({ ...prev, imageUrl: url }));
+      setImagePreview(`${API_BASE}${url}`);
+    } catch (err) {
+      console.error('Image upload error:', err);
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSave = async () => {
@@ -88,6 +114,7 @@ export const PartsPage = () => {
         price: formData.price,
         quantity: formData.quantity,
         description: formData.description.trim(),
+        imageUrl: formData.imageUrl,
       };
 
       if (editingPart) {
@@ -102,13 +129,14 @@ export const PartsPage = () => {
 
       setShowModal(false);
       setEditingPart(null);
+      setImagePreview(null);
     } catch (err) {
       console.error('Error saving part:', err);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Are you sure?')) return;
+    if (!window.confirm('Та итгэлтэй байна уу?')) return;
     try {
       await partsAPI.delete(id);
       setParts(parts.filter((p) => p._id !== id && p.id !== id));
@@ -118,14 +146,30 @@ export const PartsPage = () => {
   };
 
   const columns = [
-    { key: 'partNumber' as const, label: 'Part #', render: (val: any) => (val ? String(val) : '-') },
-    { key: 'name' as const, label: 'Name' },
-    { key: 'category' as const, label: 'Category', render: (val: any) => (val ? String(val) : '-') },
-    { key: 'brand' as const, label: 'Brand', render: (val: any) => (val ? String(val) : '-') },
-    { key: 'price' as const, label: 'Price', render: (val: any) => `₮${val}` },
+    {
+      key: 'imageUrl' as const,
+      label: 'Зураг',
+      render: (val: any) =>
+        val ? (
+          <img
+            src={`${API_BASE}${val}`}
+            alt="part"
+            style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8, border: '1px solid #e5e7eb' }}
+          />
+        ) : (
+          <div style={{ width: 80, height: 80, background: '#f3f4f6', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af' }}>
+            <FiImage size={24} />
+          </div>
+        ),
+    },
+    { key: 'partNumber' as const, label: 'Сэлбэгийн #', render: (val: any) => (val ? String(val) : '-') },
+    { key: 'name' as const, label: 'Нэр' },
+    { key: 'category' as const, label: 'Төрөл', render: (val: any) => (val ? String(val) : '-') },
+    { key: 'brand' as const, label: 'Марк', render: (val: any) => (val ? String(val) : '-') },
+    { key: 'price' as const, label: 'Үнэ', render: (val: any) => `₮${val}` },
     {
       key: 'quantity' as const,
-      label: 'Stock',
+      label: 'Үлдэгдэл',
       render: (val: any) => {
         const qty = Number(val);
         const color = qty === 0 ? '#ff4d4f' : qty <= 2 ? '#ffa940' : 'inherit';
@@ -138,13 +182,13 @@ export const PartsPage = () => {
     <div className="admin-layout">
       <Sidebar />
       <div className="admin-layout-content">
-        <TopBar title="Parts Inventory" />
+        <TopBar title="Сэлбэгийн агуулах" />
         <main className="admin-main">
           <Card
-            title="Spare Parts"
+            title="Сэлбэгүүд"
             headerAction={
               <Button variant="primary" size="sm" onClick={handleAdd} icon={<FiPlus size={16} />}>
-                New Part
+                Шинэ сэлбэг
               </Button>
             }
           >
@@ -152,7 +196,7 @@ export const PartsPage = () => {
               columns={columns}
               data={parts}
               loading={loading}
-              emptyMessage="No parts yet"
+              emptyMessage="Сэлбэг бүртгэгдээгүй байна"
               actions={(part) => (
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <Button
@@ -161,7 +205,7 @@ export const PartsPage = () => {
                     icon={<FiEdit2 size={14} />}
                     onClick={() => handleEdit(part)}
                   >
-                    Edit
+                    Засах
                   </Button>
                   <Button
                     variant="danger"
@@ -169,7 +213,7 @@ export const PartsPage = () => {
                     icon={<FiTrash2 size={14} />}
                     onClick={() => handleDelete(part._id || part.id || '')}
                   >
-                    Delete
+                    Устгах
                   </Button>
                 </div>
               )}
@@ -181,63 +225,107 @@ export const PartsPage = () => {
             onClose={() => {
               setShowModal(false);
               setEditingPart(null);
+              setImagePreview(null);
             }}
-            title={editingPart ? 'Edit Part' : 'New Part'}
+            title={editingPart ? 'Сэлбэг засах' : 'Шинэ сэлбэг'}
             footer={
               <div style={{ display: 'flex', gap: '8px' }}>
                 <Button variant="primary" onClick={handleSave}>
-                  Save
+                  Хадгалах
                 </Button>
                 <Button
                   variant="secondary"
                   onClick={() => {
                     setShowModal(false);
                     setEditingPart(null);
+                    setImagePreview(null);
                   }}
                 >
-                  Cancel
+                  Цуцлах
                 </Button>
               </div>
             }
           >
+            {/* Image upload */}
             <div className="form-group">
-              <label>Part Name</label>
+              <label>Зураг</label>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                  gap: '10px',
+                }}
+              >
+                {imagePreview && (
+                  <img
+                    src={imagePreview}
+                    alt="preview"
+                    style={{
+                      width: 120,
+                      height: 120,
+                      objectFit: 'cover',
+                      borderRadius: 8,
+                      border: '1px solid #e5e7eb',
+                    }}
+                  />
+                )}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={handleImageChange}
+                />
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  icon={<FiImage size={14} />}
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  {uploading ? 'Байршуулж байна...' : imagePreview ? 'Зураг солих' : 'Зураг оруулах'}
+                </Button>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Сэлбэгийн нэр</label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="Enter part name"
+                placeholder="Сэлбэгийн нэр оруулна уу"
               />
             </div>
             <div className="form-group">
-              <label>Part Number</label>
+              <label>Сэлбэгийн дугаар</label>
               <input
                 type="text"
                 value={formData.partNumber}
                 onChange={(e) => setFormData({ ...formData, partNumber: e.target.value })}
-                placeholder="Optional"
+                placeholder="Нэмэлт"
               />
             </div>
             <div className="form-group">
-              <label>Category</label>
+              <label>Төрөл</label>
               <input
                 type="text"
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                placeholder="e.g. Filters"
+                placeholder="жишээ: Шүүлтүүр"
               />
             </div>
             <div className="form-group">
-              <label>Brand</label>
+              <label>Марк</label>
               <input
                 type="text"
                 value={formData.brand}
                 onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-                placeholder="e.g. Toyota"
+                placeholder="жишээ: Toyota"
               />
             </div>
             <div className="form-group">
-              <label>Price (₮)</label>
+              <label>Үнэ (₮)</label>
               <input
                 type="number"
                 value={formData.price}
@@ -246,7 +334,7 @@ export const PartsPage = () => {
               />
             </div>
             <div className="form-group">
-              <label>Stock Quantity</label>
+              <label>Үлдэгдэл тоо</label>
               <input
                 type="number"
                 value={formData.quantity}
@@ -255,11 +343,11 @@ export const PartsPage = () => {
               />
             </div>
             <div className="form-group">
-              <label>Description</label>
+              <label>Тайлбар</label>
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Optional"
+                placeholder="Нэмэлт"
                 style={{ minHeight: '80px' }}
               />
             </div>
@@ -269,4 +357,3 @@ export const PartsPage = () => {
     </div>
   );
 };
-

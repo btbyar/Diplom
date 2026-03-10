@@ -27,11 +27,11 @@ export const TopBar = ({ title, onMenuClick }: TopBarProps) => {
             {user?.name?.charAt(0).toUpperCase() || 'U'}
           </div>
           <div className="user-details">
-            <p className="user-name">{user?.name || 'User'}</p>
-            <p className="user-role">{user?.role === 'admin' ? 'Administrator' : 'User'}</p>
+            <p className="user-name">{user?.name || 'Хэрэглэгч'}</p>
+            <p className="user-role">{user?.role === 'admin' ? 'Админ' : 'Хэрэглэгч'}</p>
           </div>
         </div>
-        <button className="notification-btn" title="Notifications">
+        <button className="notification-btn" title="Мэдэгдэл">
           <FiBell size={20} />
         </button>
       </div>

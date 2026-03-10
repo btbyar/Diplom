@@ -22,10 +22,10 @@ export const Login = () => {
     try {
       const response = await authAPI.login({ email, password });
       const { token, user } = response.data;
-      
+
       // Save token to localStorage
       localStorage.setItem('auth_token', token);
-      
+
       login(user, token);
       navigate('/admin');
     } catch (err: unknown) {
@@ -47,9 +47,9 @@ export const Login = () => {
       <div className="login-wrapper">
         <div className="login-box">
           <div className="login-header">
-            <div className="logo-icon" aria-hidden="true" />
-            <h1 className="login-title">Засварын Төв</h1>
-            <p className="login-subtitle">Цаг захиалах систем</p>
+            <div className="brand-logo">
+              <span className="brand-x">X</span>pand
+            </div>
           </div>
 
           <form onSubmit={handleLogin} className="login-form">

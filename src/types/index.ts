@@ -37,8 +37,24 @@ export interface Part {
   brand?: string;
   price: number;
   quantity: number;
+  imageUrl?: string;
   createdAt?: string;
   updatedAt?: string;
+}
+
+// Vehicle types
+export interface Vehicle {
+  _id?: string;
+  id?: string;
+  ownerId?: User; // Depending on population it might be string or User object
+  plateNumber: string;
+  make: string;
+  modelName: string;
+  year?: number;
+  color?: string;
+  vin?: string;
+  notes?: string;
+  createdAt?: string;
 }
 
 // Booking types

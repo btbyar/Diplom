@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { User, Booking, Service, Part, LoginRequest, UserCreateInput } from '../types';
+import type { User, Booking, Service, Part, Vehicle, LoginRequest, UserCreateInput } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
@@ -59,6 +59,17 @@ export const partsAPI = {
   delete: (id: string) => api.delete(`/parts/${id}`),
 };
 
+// Upload API
+export const uploadAPI = {
+  uploadImage: (file: File) => {
+    const formData = new FormData();
+    formData.append('image', file);
+    return api.post<{ url: string }>('/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+};
+
 // Users API
 export const usersAPI = {
   getAll: () => api.get<User[]>('/users'),
@@ -68,6 +79,17 @@ export const usersAPI = {
   update: (id: string, user: Partial<User>) =>
     api.put<User>(`/users/${id}`, user),
   delete: (id: string) => api.delete(`/users/${id}`),
+};
+
+// Vehicles API
+export const vehiclesAPI = {
+  getAll: () => api.get<Vehicle[]>('/vehicles'),
+  getById: (id: string) => api.get<Vehicle>(`/vehicles/${id}`),
+  create: (vehicle: Partial<Vehicle>) =>
+    api.post<Vehicle>('/vehicles', vehicle),
+  update: (id: string, vehicle: Partial<Vehicle>) =>
+    api.put<Vehicle>(`/vehicles/${id}`, vehicle),
+  delete: (id: string) => api.delete(`/vehicles/${id}`),
 };
 
 export default api;

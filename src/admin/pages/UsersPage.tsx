@@ -73,8 +73,8 @@ export const UsersPage = () => {
     try {
       if (editingUser) {
         await usersAPI.update(editingUser.id || '', formData);
-        setUsers(users.map(u => 
-          (u.id === editingUser.id) 
+        setUsers(users.map(u =>
+          (u.id === editingUser.id)
             ? { ...u, ...formData }
             : u
         ));
@@ -91,7 +91,7 @@ export const UsersPage = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Are you sure?')) return;
+    if (!window.confirm('Та итгэлтэй байна уу?')) return;
     try {
       await usersAPI.delete(id);
       setUsers(users.filter(u => u.id !== id));
@@ -101,23 +101,23 @@ export const UsersPage = () => {
   };
 
   const columns = [
-    { key: 'name' as const, label: 'Name' },
-    { key: 'email' as const, label: 'Email' },
-    { key: 'phone' as const, label: 'Phone' },
-    { key: 'role' as const, label: 'Role' },
+    { key: 'name' as const, label: 'Нэр' },
+    { key: 'email' as const, label: 'Имэйл' },
+    { key: 'phone' as const, label: 'Утас' },
+    { key: 'role' as const, label: 'Эрх' },
   ];
 
   return (
     <div className="admin-layout">
       <Sidebar />
       <div className="admin-layout-content">
-        <TopBar title="Users Management" />
+        <TopBar title="Хэрэглэгчийн менежмент" />
         <main className="admin-main">
-          <Card 
-            title="Users" 
+          <Card
+            title="Хэрэглэгчид"
             headerAction={
               <Button variant="primary" size="sm" onClick={handleAdd} icon={<FiPlus size={16} />}>
-                New User
+                Шинэ хэрэглэгч
               </Button>
             }
           >
@@ -127,22 +127,22 @@ export const UsersPage = () => {
               loading={loading}
               actions={(u) => (
                 <div style={{ display: 'flex', gap: '8px' }}>
-                  <Button 
-                    variant="secondary" 
+                  <Button
+                    variant="secondary"
                     size="sm"
                     icon={<FiEdit2 size={14} />}
                     onClick={() => handleEdit(u)}
                   >
-                    Edit
+                    Засах
                   </Button>
-                  <Button 
-                    variant="danger" 
+                  <Button
+                    variant="danger"
                     size="sm"
                     icon={<FiTrash2 size={14} />}
                     onClick={() => handleDelete(u.id || '')}
                     disabled={u.id === currentUser?.id}
                   >
-                    Delete
+                    Устгах
                   </Button>
                 </div>
               )}
@@ -155,73 +155,73 @@ export const UsersPage = () => {
               setShowModal(false);
               setEditingUser(null);
             }}
-            title={editingUser ? 'Edit User' : 'New User'}
+            title={editingUser ? 'Хэрэглэгч засах' : 'Шинэ хэрэглэгч'}
             footer={
               <div style={{ display: 'flex', gap: '8px' }}>
-                <Button 
+                <Button
                   variant="primary"
                   onClick={handleSave}
                 >
-                  Save
+                  Хадгалах
                 </Button>
-                <Button 
+                <Button
                   variant="secondary"
                   onClick={() => {
                     setShowModal(false);
                     setEditingUser(null);
                   }}
                 >
-                  Cancel
+                  Цуцлах
                 </Button>
               </div>
             }
           >
             <div className="form-group">
-              <label>Full Name</label>
+              <label>Бүтэн нэр</label>
               <input
                 type="text"
                 value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
-                placeholder="Enter full name"
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Бүтэн нэр оруулна уу"
               />
             </div>
             <div className="form-group">
-              <label>Email</label>
+              <label>Имэйл</label>
               <input
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
-                placeholder="Enter email"
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="Имэйл оруулна уу"
               />
             </div>
             <div className="form-group">
-              <label>Phone</label>
+              <label>Утас</label>
               <input
                 type="tel"
                 value={formData.phone}
-                onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                placeholder="Enter phone number"
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                placeholder="Утасны дугаар оруулна уу"
               />
             </div>
             {!editingUser && (
               <div className="form-group">
-                <label>Password</label>
+                <label>Нууц үг</label>
                 <input
                   type="password"
                   value={formData.password}
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  placeholder="Enter password"
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  placeholder="Нууц үг оруулна уу"
                 />
               </div>
             )}
             <div className="form-group">
-              <label>Role</label>
+              <label>Эрх</label>
               <select
                 value={formData.role}
-                onChange={(e) => setFormData({...formData, role: (e.target.value as 'admin' | 'user')})}
+                onChange={(e) => setFormData({ ...formData, role: (e.target.value as 'admin' | 'user') })}
               >
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
+                <option value="user">Хэрэглэгч</option>
+                <option value="admin">Админ</option>
               </select>
             </div>
           </Modal>

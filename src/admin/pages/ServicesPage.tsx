@@ -65,8 +65,8 @@ export const ServicesPage = () => {
     try {
       if (editingService) {
         await servicesAPI.update(editingService._id || editingService.id || '', formData);
-        setServices(services.map(s => 
-          (s._id === editingService._id || s.id === editingService.id) 
+        setServices(services.map(s =>
+          (s._id === editingService._id || s.id === editingService.id)
             ? { ...s, ...formData }
             : s
         ));
@@ -83,7 +83,7 @@ export const ServicesPage = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Are you sure?')) return;
+    if (!window.confirm('Та итгэлтэй байна уу?')) return;
     try {
       await servicesAPI.delete(id);
       setServices(services.filter(s => s._id !== id && s.id !== id));
@@ -93,10 +93,10 @@ export const ServicesPage = () => {
   };
 
   const columns = [
-    { key: 'name' as const, label: 'Name' },
-    { key: 'description' as const, label: 'Description' },
-    { key: 'price' as const, label: 'Price', render: (val: any) => `₮${val}` },
-    { key: 'duration' as const, label: 'Duration (hours)' },
+    { key: 'name' as const, label: 'Нэр' },
+    { key: 'description' as const, label: 'Тайлбар' },
+    { key: 'price' as const, label: 'Үнэ', render: (val: any) => `₮${val}` },
+    { key: 'duration' as const, label: 'Хугацаа (минут)' },
   ];
 
   return (
@@ -105,8 +105,8 @@ export const ServicesPage = () => {
       <div className="admin-layout-content">
         <TopBar title="Үйлчилгээ удирдах" />
         <main className="admin-main">
-          <Card 
-            title="Үйлчилгээнүүд" 
+          <Card
+            title="Үйлчилгээнүүд"
             headerAction={
               <Button variant="primary" size="sm" onClick={handleAdd} icon={<FiPlus size={16} />}>
                 Шинэ үйлчилгээ
@@ -119,21 +119,21 @@ export const ServicesPage = () => {
               loading={loading}
               actions={(service) => (
                 <div style={{ display: 'flex', gap: '8px' }}>
-                  <Button 
-                    variant="secondary" 
+                  <Button
+                    variant="secondary"
                     size="sm"
                     icon={<FiEdit2 size={14} />}
                     onClick={() => handleEdit(service)}
                   >
-                    Edit
+                    Засах
                   </Button>
-                  <Button 
-                    variant="danger" 
+                  <Button
+                    variant="danger"
                     size="sm"
                     icon={<FiTrash2 size={14} />}
                     onClick={() => handleDelete(service._id || service.id || '')}
                   >
-                    Delete
+                    Устгах
                   </Button>
                 </div>
               )}
@@ -146,60 +146,60 @@ export const ServicesPage = () => {
               setShowModal(false);
               setEditingService(null);
             }}
-            title={editingService ? 'Edit Service' : 'New Service'}
+            title={editingService ? 'Үйлчилгээ засах' : 'Шинэ үйлчилгээ'}
             footer={
               <div style={{ display: 'flex', gap: '8px' }}>
-                <Button 
+                <Button
                   variant="primary"
                   onClick={handleSave}
                 >
-                  Save
+                  Хадгалах
                 </Button>
-                <Button 
+                <Button
                   variant="secondary"
                   onClick={() => {
                     setShowModal(false);
                     setEditingService(null);
                   }}
                 >
-                  Cancel
+                  Цуцлах
                 </Button>
               </div>
             }
           >
             <div className="form-group">
-              <label>Service Name</label>
+              <label>Үйлчилгээний нэр</label>
               <input
                 type="text"
                 value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
-                placeholder="Enter service name"
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Үйлчилгээний нэр оруулна уу"
               />
             </div>
             <div className="form-group">
-              <label>Description</label>
+              <label>Тайлбар</label>
               <textarea
                 value={formData.description}
-                onChange={(e) => setFormData({...formData, description: e.target.value})}
-                placeholder="Enter description"
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                placeholder="Тайлбар оруулна уу"
                 style={{ minHeight: '80px' }}
               />
             </div>
             <div className="form-group">
-              <label>Price (₮)</label>
+              <label>Үнэ (₮)</label>
               <input
                 type="number"
                 value={formData.price}
-                onChange={(e) => setFormData({...formData, price: parseFloat(e.target.value)})}
+                onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
                 placeholder="0.00"
               />
             </div>
             <div className="form-group">
-              <label>Duration (hours)</label>
+              <label>Хугацаа (минут)</label>
               <input
                 type="number"
                 value={formData.duration}
-                onChange={(e) => setFormData({...formData, duration: parseFloat(e.target.value)})}
+                onChange={(e) => setFormData({ ...formData, duration: parseFloat(e.target.value) })}
                 placeholder="0"
               />
             </div>
