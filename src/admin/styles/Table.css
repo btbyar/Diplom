@@ -1,0 +1,128 @@
+/* Modern Table */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.table-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.table thead {
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 2px solid #333b4d;
+}
+
+.table th {
+  padding: 16px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #8b9aab;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 12px;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid #333b4d;
+  transition: all 0.3s ease;
+}
+
+.table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom-color: #3e82f7;
+}
+
+.table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.table td {
+  padding: 16px 12px;
+  color: #ffffff;
+}
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.table-loading {
+  padding: 40px 20px;
+  text-align: center;
+  color: #8892b0;
+  font-size: 14px;
+}
+
+.table-empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: #8892b0;
+  font-size: 14px;
+}
+
+/* Badge for status */
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-success {
+  background: rgba(0, 200, 83, 0.15);
+  color: #00c853;
+}
+
+.badge-warning {
+  background: rgba(255, 165, 0, 0.15);
+  color: #ffa500;
+}
+
+.badge-danger {
+  background: rgba(255, 76, 76, 0.15);
+  color: #ff4c4c;
+}
+
+.badge-info {
+  background: rgba(0, 212, 255, 0.15);
+  color: #00d4ff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .table {
+    font-size: 12px;
+  }
+
+  .table th,
+  .table td {
+    padding: 12px 8px;
+  }
+
+  .table-actions {
+    gap: 4px;
+  }
+}
