@@ -1,51 +1,96 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from './store';
-import { Login } from './admin/pages/Login';
+
+// Admin Pages
+import { Login as AdminLogin } from './admin/pages/Login';
 import { AdminDashboard } from './admin/pages/AdminDashboard';
 import { BookingsPage } from './admin/pages/BookingsPage';
 import { ServicesPage } from './admin/pages/ServicesPage';
-import { PartsPage } from './admin/pages/PartsPage';
+import { PartsPage as AdminPartsPage } from './admin/pages/PartsPage';
 import { UsersPage } from './admin/pages/UsersPage';
 import { AnalyticsPage } from './admin/pages/AnalyticsPage';
 import { VehiclesPage } from './admin/pages/VehiclesPage';
+
+// Client Pages
+import { MainLayout } from './components/layout/MainLayout';
+import { HomePage } from './pages/HomePage';
+import { PartsPage as ClientPartsPage } from './pages/PartsPage';
+import { ServicesPage as ClientServicesPage } from './pages/ServicesPage';
+import { BookingPage } from './pages/BookingPage';
+import { Login as ClientLogin } from './pages/Login';
+import { Register as ClientRegister } from './pages/Register';
+
 import './App.css';
 
+const ThemeManager = () => {
+  const location = useLocation();
+  
+  useEffect(() => {
+    if (location.pathname.startsWith('/admin')) {
+      document.body.className = 'admin-theme';
+    } else {
+      document.body.className = 'client-theme';
+    }
+  }, [location.pathname]);
+
+  return null;
+};
+
 function App() {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
+  
+  // Basic role check
+  const isAdmin = isAuthenticated && user?.role === 'admin';
 
   return (
     <Router>
+      <ThemeManager />
       <Routes>
-        <Route path="/login" element={<Login />} />
+        {/* Admin Auth Route */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        
+        {/* Admin Routes - Protected */}
         <Route
           path="/admin"
-          element={isAuthenticated ? <AdminDashboard /> : <Navigate to="/login" />}
+          element={isAdmin ? <AdminDashboard /> : <Navigate to="/admin/login" />}
         />
         <Route
           path="/admin/bookings"
-          element={isAuthenticated ? <BookingsPage /> : <Navigate to="/login" />}
+          element={isAdmin ? <BookingsPage /> : <Navigate to="/admin/login" />}
         />
         <Route
           path="/admin/services"
-          element={isAuthenticated ? <ServicesPage /> : <Navigate to="/login" />}
+          element={isAdmin ? <ServicesPage /> : <Navigate to="/admin/login" />}
         />
         <Route
           path="/admin/parts"
-          element={isAuthenticated ? <PartsPage /> : <Navigate to="/login" />}
+          element={isAdmin ? <AdminPartsPage /> : <Navigate to="/admin/login" />}
         />
         <Route
           path="/admin/users"
-          element={isAuthenticated ? <UsersPage /> : <Navigate to="/login" />}
+          element={isAdmin ? <UsersPage /> : <Navigate to="/admin/login" />}
         />
         <Route
           path="/admin/vehicles"
-          element={isAuthenticated ? <VehiclesPage /> : <Navigate to="/login" />}
+          element={isAdmin ? <VehiclesPage /> : <Navigate to="/admin/login" />}
         />
         <Route
           path="/admin/analytics"
-          element={isAuthenticated ? <AnalyticsPage /> : <Navigate to="/login" />}
+          element={isAdmin ? <AnalyticsPage /> : <Navigate to="/admin/login" />}
         />
-        <Route path="/" element={<Navigate to={isAuthenticated ? '/admin' : '/login'} />} />
+        
+        {/* Public Client Routes */}
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="parts" element={<ClientPartsPage />} />
+          <Route path="services" element={<ClientServicesPage />} />
+          <Route path="book" element={<BookingPage />} />
+          
+          {/* Client Auth Routes */}
+          <Route path="login" element={isAuthenticated ? <Navigate to="/" /> : <ClientLogin />} />
+          <Route path="register" element={isAuthenticated ? <Navigate to="/" /> : <ClientRegister />} />
+        </Route>
       </Routes>
     </Router>
   );

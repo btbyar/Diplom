@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiEdit2, FiPlus, FiTrash2, FiTruck } from 'react-icons/fi';
+import { FiEdit2, FiPlus, FiTrash2 } from 'react-icons/fi';
 import { useAuthStore } from '../../store';
 import { vehiclesAPI, usersAPI } from '../../services/api';
 import type { Vehicle, User } from '../../types';
