@@ -48,8 +48,6 @@ Backend нь `http://localhost:3000`-д ажиллана.
 
 ## Demo хаяг
 
-**Имэйл:** admin@gmail.com
-**Нууц үг:** admin123
 
 ## Папка структур
 
