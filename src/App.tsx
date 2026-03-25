@@ -20,6 +20,7 @@ import { ServicesPage as ClientServicesPage } from './pages/ServicesPage';
 import { BookingPage } from './pages/BookingPage';
 import { Login as ClientLogin } from './pages/Login';
 import { Register as ClientRegister } from './pages/Register';
+import { ProfilePage } from './pages/ProfilePage';
 
 import './App.css';
 
@@ -90,6 +91,7 @@ function App() {
           {/* Client Auth Routes */}
           <Route path="login" element={isAuthenticated ? <Navigate to="/" /> : <ClientLogin />} />
           <Route path="register" element={isAuthenticated ? <Navigate to="/" /> : <ClientRegister />} />
+          <Route path="profile" element={isAuthenticated ? <ProfilePage /> : <Navigate to="/login" />} />
         </Route>
       </Routes>
     </Router>

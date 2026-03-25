@@ -10,6 +10,7 @@ export const BookingPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const initialServiceId = searchParams.get('service') || '';
+  const initialDate = searchParams.get('date') || '';
 
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
@@ -17,7 +18,7 @@ export const BookingPage: React.FC = () => {
 
   const [formData, setFormData] = useState({
     serviceId: initialServiceId,
-    date: '',
+    date: initialDate,
     time: '10:00',
     notes: '',
   });

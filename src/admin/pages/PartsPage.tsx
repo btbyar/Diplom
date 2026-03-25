@@ -308,12 +308,17 @@ export const PartsPage = () => {
             </div>
             <div className="form-group">
               <label>Төрөл</label>
-              <input
-                type="text"
+              <select
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                placeholder="жишээ: Шүүлтүүр"
-              />
+              >
+                <option value="Ерөнхий">Ерөнхий</option>
+                <option value="Хөдөлгүүр">Хөдөлгүүр</option>
+                <option value="Явах эд анги">Явах эд анги</option>
+                <option value="Цахилгаан">Цахилгаан</option>
+                <option value="Кузов">Кузов</option>
+                <option value="Тос, шингэн">Тос, шингэн</option>
+              </select>
             </div>
             <div className="form-group">
               <label>Марк</label>

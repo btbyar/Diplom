@@ -49,7 +49,9 @@ export const Header: React.FC = () => {
             </nav>
             {isAuthenticated ? (
               <div className="user-menu">
-                <span className="user-name"><FiUser size={18} /> {user?.name || 'Хэрэглэгч'}</span>
+                <Link to="/profile" className="user-name">
+                  <FiUser size={18} /> {user?.name || 'Хэрэглэгч'}
+                </Link>
                 <button onClick={() => { logout(); localStorage.removeItem('auth_token'); }} className="logout-btn">
                   Гарах
                 </button>

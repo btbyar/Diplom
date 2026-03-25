@@ -1,14 +1,13 @@
 .main-footer {
-  background: var(--surface-color);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border-top: var(--glass-border);
-  padding: 80px 0 30px;
-  color: var(--text-secondary);
+  background: var(--bg-color);
+  border-top: 1px solid var(--border-color);
+  padding: 80px 0 20px;
+  position: relative;
+  overflow: hidden;
   font-family: 'Montserrat', sans-serif;
   margin-top: auto;
-  position: relative;
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+  box-shadow: none;
+  color: var(--text-secondary); /* Retained from original, not explicitly removed */
 }
 
 .main-footer::before {
@@ -16,7 +15,7 @@
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
 }
 
 .footer-grid {
@@ -35,7 +34,7 @@
   margin-bottom: 20px;
   color: var(--text-primary);
   position: relative;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  text-shadow: none;
 }
 
 .logo-text {
@@ -43,10 +42,7 @@
 }
 
 .logo-text-highlight {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--accent-color);
 }
 
 .footer-description {
@@ -68,14 +64,14 @@
   justify-content: center;
   width: 44px;
   height: 44px;
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: rgba(0, 0, 0, 0.03);
   border: var(--glass-border);
   border-radius: 50%;
   color: var(--text-primary);
   text-decoration: none;
   transition: var(--transition-bounce);
   font-size: 20px;
-  box-shadow: var(--shadow-sm), inset 0 1px 1px rgba(255,255,255,0.05);
+  box-shadow: none;
 }
 
 .social-link:hover {
@@ -83,7 +79,7 @@
   color: #ffffff;
   border-color: transparent;
   transform: translateY(-4px);
-  box-shadow: var(--glow-primary);
+  box-shadow: none;
 }
 
 .footer-heading {
@@ -128,7 +124,7 @@
 .footer-links a:hover {
   color: var(--accent-secondary);
   transform: translateX(6px);
-  text-shadow: 0 0 8px rgba(236, 72, 153, 0.5);
+  text-shadow: none;
 }
 
 .footer-contact {
@@ -152,7 +148,7 @@
   color: var(--accent-color);
   font-size: 20px;
   flex-shrink: 0;
-  filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.5));
+  filter: );
 }
 
 .footer-bottom {

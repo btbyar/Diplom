@@ -45,7 +45,7 @@
   padding: 44px;
   border-radius: 12px;
   background: #232c3e;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  box-shadow: none;
   animation: loginPop 420ms ease-out;
 }
 
@@ -137,7 +137,7 @@
   outline: none;
   background: rgba(255, 255, 255, 0.08);
   border-color: #00d4ff;
-  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);
+  box-shadow: none;
 }
 
 .login-input:disabled {
@@ -149,7 +149,7 @@
 .login-input:-webkit-autofill:hover,
 .login-input:-webkit-autofill:focus {
   -webkit-text-fill-color: #ffffff;
-  box-shadow: 0 0 0 30px rgba(255, 255, 255, 0.05) inset;
+  box-shadow: none;
   transition: background-color 9999s ease-in-out 0s;
 }
 
@@ -243,7 +243,7 @@
   overflow: hidden;
   transition: all 0.3s ease;
   margin-top: 4px;
-  box-shadow: 0 4px 12px rgba(62, 130, 247, 0.3);
+  box-shadow: none;
 }
 
 .login-btn::before {
@@ -258,7 +258,7 @@
 .login-btn:hover:not(:disabled) {
   background: #2b6fe4;
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(62, 130, 247, 0.4);
+  box-shadow: none;
 }
 
 .login-btn:hover:not(:disabled)::before {
@@ -267,7 +267,7 @@
 
 .login-btn:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(62, 130, 247, 0.3);
+  box-shadow: none;
 }
 
 .login-btn:disabled {

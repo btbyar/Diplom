@@ -10,7 +10,7 @@
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
 }
 
 .stat-card::before {
@@ -27,7 +27,7 @@
 
 .stat-card:hover {
   border-color: var(--accent-color);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  box-shadow: none;
   transform: translateY(-4px);
 }
 

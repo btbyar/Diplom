@@ -28,7 +28,7 @@ export const ServicesPage: React.FC = () => {
     <div className="client-services-page">
       <div className="page-header">
         <div className="container">
-          <h1>Ауто засварын үйлчилгээ</h1>
+          <h1>Авто засварын үйлчилгээ</h1>
           <p>Бид таны автомашинд мэргэжлийн түвшинд, баталгаат засвар үйлчилгээ үзүүлж байна.</p>
         </div>
       </div>
@@ -47,12 +47,12 @@ export const ServicesPage: React.FC = () => {
                 <div className="service-content">
                   <h3 className="service-name">{service.name}</h3>
                   <p className="service-desc">{service.description || 'Дэлгэрэнгүй мэдээлэл ороогүй байна.'}</p>
-                  
+
                   <ul className="service-features">
                     <li><FiClock className="icon" /> Хугацаа: ~{service.duration || 60} мин</li>
                     <li><FiCheckCircle className="icon" /> Баталгаат хугацаатай</li>
                   </ul>
-                  
+
                   <div className="service-footer">
                     <span className="service-price">₮{service.price.toLocaleString()}</span>
                     <Link to={`/book?service=${service._id || service.id}`} className="btn-book">

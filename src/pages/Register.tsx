@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuthStore } from '../store';
-import { usersAPI, authAPI } from '../services/api';
-import { FiMail, FiLock, FiUser, FiPhone, FiArrowRight } from 'react-icons/fi';
+import { usersAPI, authAPI, vehiclesAPI } from '../services/api';
+import { FiMail, FiLock, FiUser, FiPhone, FiArrowRight, FiTruck, FiHash } from 'react-icons/fi';
 import './Auth.css';
 
 export const Register: React.FC = () => {
@@ -16,6 +16,9 @@ export const Register: React.FC = () => {
     phone: '',
     password: '',
     confirmPassword: '',
+    make: '',
+    modelName: '',
+    plateNumber: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -36,6 +39,7 @@ export const Register: React.FC = () => {
     setLoading(true);
 
     try {
+      // 1. Create User
       await usersAPI.create({
         name: formData.name,
         email: formData.email,
@@ -44,12 +48,29 @@ export const Register: React.FC = () => {
         role: 'user',
       });
 
+      // 2. Login newly created user to get token
       const response = await authAPI.login({ email: formData.email, password: formData.password });
       const { token, user } = response.data;
       
+      // Save token directly to local storage so subsequent API calls use it
       localStorage.setItem('auth_token', token);
       login(user, token);
       
+      // 3. Register user's vehicle
+      if (formData.plateNumber && formData.make && formData.modelName) {
+        try {
+          await vehiclesAPI.create({
+            ownerId: user.id || user._id,
+            plateNumber: formData.plateNumber,
+            make: formData.make,
+            modelName: formData.modelName
+          });
+        } catch (vehicleErr) {
+          console.error("Failed to register vehicle:", vehicleErr);
+          // We can optionally show a toast error here, but the user is already successful
+        }
+      }
+
       navigate('/');
     } catch (err: unknown) {
       if (axios.isAxiosError<{ error?: string; message?: string }>(err)) {
@@ -70,7 +91,7 @@ export const Register: React.FC = () => {
       <div className="auth-orb orb-3"></div>
       <div className="auth-grid-overlay"></div>
 
-      <div className="auth-glass-container register-container">
+      <div className="auth-glass-container register-container" style={{ maxWidth: '700px' }}>
         <Link to="/" className="auth-logo-center">
           <span className="logo-text">X</span><span className="logo-text-highlight">pand</span>
         </Link>
@@ -81,6 +102,7 @@ export const Register: React.FC = () => {
         </div>
 
         <form onSubmit={handleRegister} className="auth-form-premium">
+          <h3 style={{ fontSize: '16px', color: 'var(--text-secondary)', marginBottom: '15px' }}>1. Хувийн мэдээлэл</h3>
           <div className="auth-form-grid">
             <div className="input-group-premium">
               <FiUser className="input-icon-premium" />
@@ -155,6 +177,51 @@ export const Register: React.FC = () => {
                 className="input-premium"
               />
             </div>
+          </div>
+
+          <h3 style={{ fontSize: '16px', color: 'var(--text-secondary)', marginTop: '20px', marginBottom: '15px' }}>2. Автомашины мэдээлэл</h3>
+          <div className="auth-form-grid">
+            <div className="input-group-premium">
+              <FiTruck className="input-icon-premium" />
+              <input
+                type="text"
+                name="make"
+                value={formData.make}
+                onChange={handleChange}
+                placeholder="Үйлдвэрлэгч (Жнь: Toyota)"
+                required
+                disabled={loading}
+                className="input-premium"
+              />
+            </div>
+
+            <div className="input-group-premium">
+              <FiTruck className="input-icon-premium" />
+              <input
+                type="text"
+                name="modelName"
+                value={formData.modelName}
+                onChange={handleChange}
+                placeholder="Загвар (Жнь: Prius 20)"
+                required
+                disabled={loading}
+                className="input-premium"
+              />
+            </div>
+          </div>
+
+          <div className="input-group-premium">
+            <FiHash className="input-icon-premium" />
+            <input
+              type="text"
+              name="plateNumber"
+              value={formData.plateNumber}
+              onChange={handleChange}
+              placeholder="Улсын дугаар (Жнь: 1234 УНЭ)"
+              required
+              disabled={loading}
+              className="input-premium"
+            />
           </div>
 
           {error && <div className="auth-error-premium">{error}</div>}

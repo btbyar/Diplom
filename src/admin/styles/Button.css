@@ -20,18 +20,18 @@
   background: #3e82f7;
   color: #ffffff;
   border: none;
-  box-shadow: 0 4px 12px rgba(62, 130, 247, 0.3);
+  box-shadow: none;
 }
 
 .btn-primary:hover {
   background: #2b6fe4;
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(62, 130, 247, 0.4);
+  box-shadow: none;
 }
 
 .btn-primary:active {
   transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(62, 130, 247, 0.3);
+  box-shadow: none;
 }
 
 .btn-secondary {
