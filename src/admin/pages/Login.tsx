@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useAuthStore } from '../../store';
+import { useAdminAuthStore } from '../../store';
 import { authAPI } from '../../services/api';
 import '../styles/Login.css';
 
 export const Login = () => {
   const navigate = useNavigate();
-  const { login } = useAuthStore();
+  const { login } = useAdminAuthStore();
   const [email, setEmail] = useState('admin@gmail.com');
   const [password, setPassword] = useState('admin123');
   const [showPassword, setShowPassword] = useState(false);
@@ -24,7 +24,7 @@ export const Login = () => {
       const { token, user } = response.data;
 
       // Save token to localStorage
-      localStorage.setItem('auth_token', token);
+      localStorage.setItem('admin_auth_token', token);
 
       login(user, token);
       navigate('/admin');

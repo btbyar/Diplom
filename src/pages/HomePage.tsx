@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { FiSearch, FiShoppingCart, FiArrowRight } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { FiShoppingCart, FiArrowRight, FiCheck } from 'react-icons/fi';
 import { partsAPI } from '../services/api';
+import { useCartStore } from '../store';
 import type { Part } from '../types';
 import './HomePage.css';
 
 const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:3000';
 
 export const HomePage: React.FC = () => {
-  const navigate = useNavigate();
-  
-  // Quick Search & Featured Parts
-  const [searchTerm, setSearchTerm] = useState('');
+  // Featured Parts
   const [featuredParts, setFeaturedParts] = useState<Part[]>([]);
   const [loadingParts, setLoadingParts] = useState(true);
+  const [addedItems, setAddedItems] = useState<Record<string, boolean>>({});
+
+  const { addItem } = useCartStore();
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -30,13 +31,20 @@ export const HomePage: React.FC = () => {
     fetchInitialData();
   }, []);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchTerm.trim()) {
-      navigate(`/parts?search=${encodeURIComponent(searchTerm)}`);
-    } else {
-      navigate('/parts');
-    }
+
+  const handleAddToCart = (part: Part) => {
+    const partId = part._id || part.id || '';
+    addItem({
+      id: partId,
+      name: part.name,
+      price: part.price,
+      quantity: 1,
+      imageUrl: part.imageUrl
+    });
+    setAddedItems(prev => ({ ...prev, [partId]: true }));
+    setTimeout(() => {
+      setAddedItems(prev => ({ ...prev, [partId]: false }));
+    }, 2000);
   };
 
   return (
@@ -63,26 +71,6 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Quick Search Strip */}
-      <section className="quick-search-strip">
-        <div className="container">
-          <form onSubmit={handleSearch} className="quick-search-form">
-            <label className="strip-label">Сэлбэг хурдан хайх:</label>
-            <div className="strip-input-group">
-              <input 
-                type="text" 
-                placeholder="Жишээ: Амортизатор, Тос..." 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <button type="submit" className="btn-search">
-                <FiSearch /> Хайх
-              </button>
-            </div>
-          </form>
-        </div>
-      </section>
-
       {/* Featured Parts Section */}
       <section className="featured-parts-section">
         <div className="container">
@@ -97,8 +85,10 @@ export const HomePage: React.FC = () => {
             <div className="loading-state">Уншиж байна...</div>
           ) : (
             <div className="parts-grid">
-              {featuredParts.map(part => (
-                <div key={part._id || part.id} className="part-card">
+              {featuredParts.map(part => {
+                const partId = part._id || part.id || '';
+                return (
+                <div key={partId} className="part-card">
                   <div className="part-image">
                     {part.imageUrl ? (
                       <img src={`${API_BASE}${part.imageUrl}`} alt={part.name} />
@@ -112,12 +102,20 @@ export const HomePage: React.FC = () => {
                     <div className="part-price">
                       <span className="price-value">₮{part.price.toLocaleString()}</span>
                     </div>
-                    <button className="btn-add-cart" onClick={() => navigate(`/parts?search=${encodeURIComponent(part.name)}`)}>
-                      <FiShoppingCart /> Дэлгэрэнгүй
+                    <button 
+                      className="btn-add-cart" 
+                      onClick={() => handleAddToCart(part)}
+                      style={addedItems[partId] ? { background: 'var(--accent-secondary)' } : {}}
+                    >
+                      {addedItems[partId] ? (
+                        <><FiCheck /> Нэмэгдлээ</>
+                      ) : (
+                        <><FiShoppingCart /> Сагсанд нэмэх</>
+                      )}
                     </button>
                   </div>
                 </div>
-              ))}
+              )})}
             </div>
           )}
         </div>

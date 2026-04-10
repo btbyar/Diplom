@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { servicesAPI } from '../services/api';
 import type { Service } from '../types';
-import { FiClock, FiCheckCircle, FiCalendar } from 'react-icons/fi';
+import { FiClock, FiCheckCircle, FiCalendar, FiSettings } from 'react-icons/fi';
 import './ServicesPage.css';
 
 export const ServicesPage: React.FC = () => {
@@ -41,25 +41,34 @@ export const ServicesPage: React.FC = () => {
             <h3>Одоогоор үйлчилгээ бүртгэгдээгүй байна.</h3>
           </div>
         ) : (
-          <div className="services-grid">
+          <div className="services-list-view">
             {services.map(service => (
-              <div key={service._id || service.id} className="service-card">
-                <div className="service-content">
-                  <h3 className="service-name">{service.name}</h3>
-                  <p className="service-desc">{service.description || 'Дэлгэрэнгүй мэдээлэл ороогүй байна.'}</p>
-
-                  <ul className="service-features">
-                    <li><FiClock className="icon" /> Хугацаа: ~{service.duration || 60} мин</li>
-                    <li><FiCheckCircle className="icon" /> Баталгаат хугацаатай</li>
-                  </ul>
-
-                  <div className="service-footer">
-                    <span className="service-price">₮{service.price.toLocaleString()}</span>
-                    <Link to={`/book?service=${service._id || service.id}`} className="btn-book">
-                      <FiCalendar /> Цаг захиалах
-                    </Link>
+              <div key={service._id || service.id} className="service-row">
+                
+                <div className="service-row-left">
+                  <div className="service-icon-box">
+                    <FiSettings />
+                  </div>
+                  <div className="service-info">
+                    <h3 className="service-name">{service.name}</h3>
+                    <p className="service-desc">{service.description || 'Дэлгэрэнгүй мэдээлэл ороогүй байна.'}</p>
+                    <div className="service-meta">
+                      <span className="meta-badge"><FiClock /> {service.duration || 60} мин</span>
+                      <span className="meta-badge"><FiCheckCircle /> Баталгаат хугацаа</span>
+                    </div>
                   </div>
                 </div>
+
+                <div className="service-row-right">
+                  <div className="service-price">
+                    <span className="price-label">Үнэ</span>
+                    <span className="price-val">₮{service.price.toLocaleString()}</span>
+                  </div>
+                  <Link to={`/book?service=${service._id || service.id}`} className="btn-book-row">
+                    Цаг захиалах <FiCalendar />
+                  </Link>
+                </div>
+                
               </div>
             ))}
           </div>

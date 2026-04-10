@@ -15,7 +15,7 @@
   content: '';
   position: absolute;
   inset: -220px;
-  background: radial-gradient(circle, rgba(224, 230, 255, 0.09) 1px, transparent 1px);
+  background: none;
   background-size: 56px 56px;
   opacity: 0.35;
   transform: rotate(12deg);
@@ -79,9 +79,7 @@
 }
 
 .brand-x {
-  background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #00d4ff;
   font-size: 46px;
   margin-right: 1px;
 }
@@ -250,8 +248,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
-  transform: translateX(-120%);
+  background: none;
   transition: transform 0.5s ease;
 }
 

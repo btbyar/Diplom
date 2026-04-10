@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiEdit2, FiImage, FiPlus, FiTrash2 } from 'react-icons/fi';
-import { useAuthStore } from '../../store';
+import { useAdminAuthStore } from '../../store';
 import { partsAPI, uploadAPI } from '../../services/api';
 import type { Part } from '../../types';
 import { Button } from '../components/Button';
@@ -16,7 +16,7 @@ const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://lo
 
 export const PartsPage = () => {
   const navigate = useNavigate();
-  const { user } = useAuthStore();
+  const { user } = useAdminAuthStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [parts, setParts] = useState<Part[]>([]);

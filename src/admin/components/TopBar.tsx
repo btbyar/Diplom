@@ -1,4 +1,4 @@
-import { useAuthStore } from '../../store';
+import { useAdminAuthStore } from '../../store';
 import { FiBell } from 'react-icons/fi';
 import '../styles/TopBar.css';
 
@@ -8,7 +8,7 @@ interface TopBarProps {
 }
 
 export const TopBar = ({ title, onMenuClick }: TopBarProps) => {
-  const { user } = useAuthStore();
+  const { user } = useAdminAuthStore();
 
   return (
     <header className="topbar">

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate, Link } from 'react-router-dom';
+import { useSearchParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import { servicesAPI, bookingsAPI } from '../services/api';
 import { useAuthStore } from '../store';
 import type { Service } from '../types';
@@ -9,6 +9,7 @@ export const BookingPage: React.FC = () => {
   const { isAuthenticated, user } = useAuthStore();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const initialServiceId = searchParams.get('service') || '';
   const initialDate = searchParams.get('date') || '';
 
@@ -45,17 +46,22 @@ export const BookingPage: React.FC = () => {
     
     try {
       setSubmitting(true);
-      await bookingsAPI.create({
+      const response = await bookingsAPI.create({
         serviceId: formData.serviceId,
         date: formData.date,
         time: formData.time,
         notes: formData.notes,
-        status: 'pending',
+        status: 'payment_pending',
         userId: user?.id || user?._id || '',
       } as any);
       
-      alert('Захиалга амжилттай бүртгэгдлээ!');
-      navigate('/');
+      const paymentUrl = response.data.paymentUrl;
+      if (paymentUrl) {
+         window.location.href = paymentUrl;
+      } else {
+         alert('Захиалга амжилттай бүртгэгдлээ!');
+         navigate('/');
+      }
     } catch (error: any) {
       console.error('Error submitting booking:', error);
       alert('Алдаа гарлаа: ' + (error.response?.data?.message || 'Одоохондоо боломжгүй байна'));
@@ -71,7 +77,7 @@ export const BookingPage: React.FC = () => {
           <h2>Нэвтрэх шаардлагатай</h2>
           <p>Цаг захиалахын тулд та системд нэвтэрч орсон байх шаардлагатай.</p>
           <div className="auth-actions">
-            <Link to="/login" className="btn-primary">Нэвтрэх</Link>
+            <Link to="/login" state={{ from: location.pathname + location.search }} className="btn-primary">Нэвтрэх</Link>
             <Link to="/" className="btn-secondary">Арагш буцах</Link>
           </div>
         </div>

@@ -1,21 +1,22 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuthStore } from '../../store';
-import { FiHome, FiCalendar, FiTool, FiPackage, FiUsers, FiTrendingUp, FiLogOut, FiList } from 'react-icons/fi';
+import { useAdminAuthStore } from '../../store';
+import { FiHome, FiCalendar, FiTool, FiPackage, FiUsers, FiTrendingUp, FiLogOut, FiList, FiCreditCard } from 'react-icons/fi';
 import '../styles/Sidebar.css';
 
 export const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { logout } = useAuthStore();
+  const { logout } = useAdminAuthStore();
 
   const menuItems = [
     { icon: FiHome, label: 'Нүүр', path: '/admin' },
     { icon: FiCalendar, label: 'Захиалга', path: '/admin/bookings' },
+    { icon: FiCreditCard, label: 'Төлбөр', path: '/admin/payments' },
     { icon: FiTool, label: 'Үйлчилгээ', path: '/admin/services' },
     { icon: FiUsers, label: 'Хэрэглэгч', path: '/admin/users' },
     { icon: FiList, label: 'Машин', path: '/admin/vehicles' },
     { icon: FiPackage, label: 'Сэлбэг', path: '/admin/parts' },
-    { icon: FiTrendingUp, label: 'Анализ ', path: '/admin/analytics' },
+    { icon: FiTrendingUp, label: 'Анализ', path: '/admin/analytics' },
   ];
 
   const handleLogout = () => {

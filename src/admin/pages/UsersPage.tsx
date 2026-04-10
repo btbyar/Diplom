@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../store';
+import { useAdminAuthStore } from '../../store';
 import { usersAPI } from '../../services/api';
 import { Sidebar } from '../components/Sidebar';
 import { TopBar } from '../components/TopBar';
@@ -14,7 +14,7 @@ import '../styles/Layout.css';
 
 export const UsersPage = () => {
   const navigate = useNavigate();
-  const { user: currentUser } = useAuthStore();
+  const { user: currentUser } = useAdminAuthStore();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);

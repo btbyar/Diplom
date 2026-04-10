@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../store';
+import { useAdminAuthStore } from '../../store';
 import { bookingsAPI, servicesAPI } from '../../services/api';
 import { Sidebar } from '../components/Sidebar';
 import { TopBar } from '../components/TopBar';
@@ -15,7 +15,7 @@ import '../styles/Layout.css';
 
 export const BookingsPage = () => {
   const navigate = useNavigate();
-  const { user } = useAuthStore();
+  const { user } = useAdminAuthStore();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [users, setUsers] = useState<User[]>([]);

@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useAuthStore } from '../store';
 import { authAPI } from '../services/api';
-import { FiMail, FiLock, FiCheckSquare, FiSquare, FiArrowRight } from 'react-icons/fi';
+import { FiMail, FiLock, FiArrowRight } from 'react-icons/fi';
 import './Auth.css';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuthStore();
+  
+  const from = location.state?.from || '/';
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -28,7 +30,7 @@ export const Login: React.FC = () => {
       localStorage.setItem('auth_token', token);
       login(user, token);
       
-      navigate(-1);
+      navigate(from, { replace: true });
     } catch (err: unknown) {
       if (axios.isAxiosError<{ error?: string }>(err)) {
         setError(err.response?.data?.error || 'Нэвтрэхэд алдаа гарлаа. Имэйл болон нууц үгээ шалгаарай.');
@@ -85,18 +87,7 @@ export const Login: React.FC = () => {
             />
           </div>
 
-          <div className="auth-options-premium">
-            <label className="checkbox-premium">
-              <input 
-                type="checkbox" 
-                checked={rememberMe}
-                onChange={() => setRememberMe(!rememberMe)}
-              />
-              <div className="checkbox-box">
-                {rememberMe && <FiCheckSquare />}
-              </div>
-              <span>Намайг санах</span>
-            </label>
+          <div className="auth-options-premium" style={{ justifyContent: 'flex-end' }}>
             <a href="#" className="forgot-password-premium">Нууц үг сэргээх</a>
           </div>
 
@@ -105,7 +96,6 @@ export const Login: React.FC = () => {
           <button type="submit" disabled={loading} className="btn-auth-premium">
             <span>{loading ? 'Түр хүлээнэ үү...' : 'Нэвтрэх'}</span>
             {!loading && <FiArrowRight className="btn-icon" />}
-            <div className="btn-glow"></div>
           </button>
         </form>
 

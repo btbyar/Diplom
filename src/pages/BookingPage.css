@@ -1,75 +1,70 @@
+/* Premium Dark Theme for Booking Page */
 .booking-page {
-  font-family: 'Montserrat', sans-serif;
-  background-color: transparent;
   min-height: calc(100vh - 200px);
   padding: 80px 0;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
+  z-index: 1;
 }
 
 /* Ambient glow */
 .booking-page::before {
   content: '';
   position: absolute;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle at center, rgba(139, 92, 246, 0.15) 0%, transparent 60%);
+  width: 800px;
+  height: 800px;
+  background: none;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
+  filter: blur(50px);
 }
 
 .booking-card {
-  background: var(--surface-color);
+  background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border-radius: var(--radius-xl);
-  box-shadow: none;
+  box-shadow: var(--shadow-xl);
   max-width: 680px;
   width: 100%;
   margin: 0 auto;
   overflow: hidden;
   border: var(--glass-border);
   position: relative;
-  z-index: 1;
-}
-
-.booking-card::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 3px;
-  background: var(--gradient-primary);
 }
 
 .booking-header {
-  background: var(--surface-hover);
-  color: var(--text-primary);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--primary-color);
   padding: 40px;
   text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   position: relative;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.booking-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0; height: 1px;
+  background: var(--accent-color);
 }
 
 .booking-header h2 {
-  font-size: 32px;
+  font-size: 2rem;
   font-weight: 800;
   margin-bottom: 12px;
-  position: relative;
-  z-index: 1;
   letter-spacing: -0.5px;
 }
 
 .booking-header p {
   color: var(--text-secondary);
-  font-size: 16px;
-  position: relative;
-  z-index: 1;
+  font-size: 1rem;
 }
 
 .booking-form {
@@ -85,7 +80,7 @@
   font-weight: 600;
   color: var(--text-secondary);
   margin-bottom: 10px;
-  font-size: 15px;
+  font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -95,14 +90,13 @@
 .form-group textarea {
   width: 100%;
   padding: 16px 20px;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-md);
-  font-size: 16px;
+  font-size: 1rem;
   font-family: inherit;
   transition: var(--transition-normal);
-  background-color: var(--surface-hover);
-  color: var(--text-primary);
-  box-shadow: none;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: var(--primary-color);
 }
 
 .form-group input:focus,
@@ -110,14 +104,13 @@
 .form-group textarea:focus {
   border-color: var(--accent-color);
   outline: none;
-  background-color: var(--surface-color);
-  box-shadow: none;
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
 }
 
 .form-group input::placeholder,
-.form-group select::placeholder,
 .form-group textarea::placeholder {
-  color: rgba(0,0,0,0.3);
+  color: var(--text-muted);
 }
 
 .form-row {
@@ -126,10 +119,10 @@
   gap: 24px;
 }
 
-/* Add custom arrow to select */
+/* Custom select arrow */
 select {
   appearance: none;
-  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2394a3b8%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23b0b0c0%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
   background-repeat: no-repeat;
   background-position: right 20px top 50%;
   background-size: 12px auto;
@@ -138,58 +131,37 @@ select {
 
 select option {
   background: var(--bg-color);
-  color: var(--text-primary);
+  color: var(--primary-color);
 }
 
 .btn-submit {
   width: 100%;
   padding: 18px;
-  background: var(--accent-color);
+  background: var(--gradient-primary);
   color: #fff;
   border: none;
   border-radius: var(--radius-pill);
-  font-size: 16px;
+  font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
-  transition: var(--transition-bounce);
+  transition: all var(--transition-bounce);
   margin-top: 20px;
-  box-shadow: none;
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-submit::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--accent-hover);
-  opacity: 0;
-  transition: opacity var(--transition-fast);
-  z-index: 0;
-}
-
-.btn-submit span {
-  position: relative;
-  z-index: 1;
 }
 
 .btn-submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: none;
-}
-
-.btn-submit:hover:not(:disabled)::before {
-  opacity: 1;
+  box-shadow: 0 10px 25px rgba(138, 43, 226, 0.4);
 }
 
 .btn-submit:disabled {
-  background: rgba(255,255,255,0.05);
-  box-shadow: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
   cursor: not-allowed;
   transform: none;
-  color: var(--text-muted);
+  box-shadow: none;
 }
 
+/* Auth Required State */
 .booking-auth-required {
   display: flex;
   align-items: center;
@@ -198,17 +170,16 @@ select option {
 }
 
 .auth-card {
-  background: var(--surface-color);
+  background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  padding: 60px 50px;
+  padding: 60px 40px;
   border-radius: var(--radius-xl);
-  box-shadow: none;
+  border: var(--glass-border);
   text-align: center;
   max-width: 480px;
-  border: var(--glass-border);
   position: relative;
   overflow: hidden;
+  box-shadow: var(--shadow-lg);
 }
 
 .auth-card::before {
@@ -216,14 +187,14 @@ select option {
   position: absolute;
   top: -50px; right: -50px;
   width: 150px; height: 150px;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%);
+  background: none;
   border-radius: 50%;
 }
 
 .auth-card h2 {
-  font-size: 32px;
+  font-size: 2rem;
   font-weight: 800;
-  color: var(--text-primary);
+  color: var(--primary-color);
   margin-bottom: 20px;
   position: relative;
   z-index: 1;
@@ -231,7 +202,7 @@ select option {
 
 .auth-card p {
   color: var(--text-secondary);
-  font-size: 16px;
+  font-size: 1rem;
   margin-bottom: 40px;
   line-height: 1.6;
   position: relative;
@@ -248,42 +219,38 @@ select option {
 
 .auth-actions .btn-primary {
   display: block;
-  background: var(--accent-color);
+  background: var(--gradient-primary);
   color: #fff;
   padding: 16px;
   border-radius: var(--radius-pill);
   text-decoration: none;
   font-weight: 700;
-  transition: var(--transition-bounce);
-  box-shadow: none;
+  transition: all var(--transition-fast);
 }
 
 .auth-actions .btn-primary:hover {
-  background: var(--accent-hover);
   transform: translateY(-2px);
-  box-shadow: none;
+  box-shadow: 0 5px 20px rgba(0, 240, 255, 0.3);
 }
 
 .auth-actions .btn-secondary {
   display: block;
-  background: rgba(0,0,0,0.05);
-  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--primary-color);
   padding: 16px;
   border-radius: var(--radius-pill);
   text-decoration: none;
   font-weight: 700;
-  transition: var(--transition-fast);
-  border: 1px solid rgba(0,0,0,0.1);
+  transition: all var(--transition-fast);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .auth-actions .btn-secondary:hover {
-  background: var(--surface-hover);
+  background: rgba(255, 255, 255, 0.1);
   transform: translateY(-2px);
 }
 
 @media (max-width: 576px) {
-  .form-row {
-    grid-template-columns: 1fr;
-    gap: 0;
-  }
+  .form-row { grid-template-columns: 1fr; gap: 0; }
+  .booking-form { padding: 30px 20px; }
 }

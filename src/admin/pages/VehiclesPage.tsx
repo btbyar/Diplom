@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiEdit2, FiPlus, FiTrash2 } from 'react-icons/fi';
-import { useAuthStore } from '../../store';
+import { useAdminAuthStore } from '../../store';
 import { vehiclesAPI, usersAPI } from '../../services/api';
 import type { Vehicle, User } from '../../types';
 import { Button } from '../components/Button';
@@ -14,7 +14,7 @@ import '../styles/Layout.css';
 
 export const VehiclesPage = () => {
     const navigate = useNavigate();
-    const { user } = useAuthStore();
+    const { user } = useAdminAuthStore();
 
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
     const [users, setUsers] = useState<User[]>([]);

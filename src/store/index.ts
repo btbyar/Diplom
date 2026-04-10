@@ -3,6 +3,48 @@ import type { User, Booking, Service } from '../types';
 
 import { persist, createJSONStorage } from 'zustand/middleware';
 
+export interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  imageUrl?: string;
+}
+
+interface CartStore {
+  items: CartItem[];
+  addItem: (item: CartItem) => void;
+  removeItem: (id: string) => void;
+  updateQuantity: (id: string, quantity: number) => void;
+  clearCart: () => void;
+}
+
+export const useCartStore = create<CartStore>()(
+  persist(
+    (set) => ({
+      items: [],
+      addItem: (item) => set((state) => {
+        const existing = state.items.find((i) => i.id === item.id);
+        if (existing) {
+          return { items: state.items.map((i) => i.id === item.id ? { ...i, quantity: i.quantity + item.quantity } : i) };
+        }
+        return { items: [...state.items, item] };
+      }),
+      removeItem: (id) => set((state) => ({ items: state.items.filter((i) => i.id !== id) })),
+      updateQuantity: (id, quantity) => set((state) => ({
+        items: quantity <= 0 
+          ? state.items.filter((i) => i.id !== id) 
+          : state.items.map((i) => i.id === id ? { ...i, quantity } : i)
+      })),
+      clearCart: () => set({ items: [] })
+    }),
+    {
+      name: 'cart-storage',
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);
+
 interface AuthStore {
   user: User | null;
   token: string | null;
@@ -25,6 +67,25 @@ export const useAuthStore = create<AuthStore>()(
     }),
     {
       name: 'auth-storage',
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);
+
+export const useAdminAuthStore = create<AuthStore>()(
+  persist(
+    (set) => ({
+      user: null,
+      token: null,
+      isAuthenticated: false,
+      login: (user, token) => set({ user, token, isAuthenticated: true }),
+      logout: () => {
+        localStorage.removeItem('admin_auth_token');
+        set({ user: null, token: null, isAuthenticated: false });
+      },
+    }),
+    {
+      name: 'admin-auth-storage',
       storage: createJSONStorage(() => localStorage),
     }
   )
@@ -67,3 +128,23 @@ export const useServiceStore = create<ServiceStore>((set) => ({
     })),
   deleteService: (id) => set((state) => ({ services: state.services.filter((s) => s.id !== id) })),
 }));
+
+interface ThemeStore {
+  theme: 'dark' | 'light';
+  toggleTheme: () => void;
+  setTheme: (theme: 'dark' | 'light') => void;
+}
+
+export const useThemeStore = create<ThemeStore>()(
+  persist(
+    (set) => ({
+      theme: 'dark',
+      toggleTheme: () => set((state) => ({ theme: state.theme === 'dark' ? 'light' : 'dark' })),
+      setTheme: (theme) => set({ theme }),
+    }),
+    {
+      name: 'theme-storage',
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);

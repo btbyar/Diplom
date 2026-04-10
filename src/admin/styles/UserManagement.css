@@ -307,7 +307,7 @@
 }
 
 .users-table thead {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #667eea;
   color: white;
 }
 
@@ -352,7 +352,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #667eea;
   color: white;
   display: flex;
   align-items: center;
@@ -391,7 +391,7 @@
 }
 
 .role-badge.admin {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #667eea;
   color: white;
   box-shadow: none;
 }
@@ -412,7 +412,7 @@
 }
 
 .status-badge.active {
-  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  background: #f39c12;
   color: white;
   box-shadow: none;
 }

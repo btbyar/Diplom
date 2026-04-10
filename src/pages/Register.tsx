@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useAuthStore } from '../store';
 import { usersAPI, authAPI, vehiclesAPI } from '../services/api';
@@ -8,7 +8,10 @@ import './Auth.css';
 
 export const Register: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuthStore();
+  
+  const from = location.state?.from || '/';
   
   const [formData, setFormData] = useState({
     name: '',
@@ -71,7 +74,7 @@ export const Register: React.FC = () => {
         }
       }
 
-      navigate('/');
+      navigate(from, { replace: true });
     } catch (err: unknown) {
       if (axios.isAxiosError<{ error?: string; message?: string }>(err)) {
         setError(err.response?.data?.error || err.response?.data?.message || 'Бүртгүүлэхэд алдаа гарлаа.');
@@ -226,10 +229,14 @@ export const Register: React.FC = () => {
 
           {error && <div className="auth-error-premium">{error}</div>}
 
-          <button type="submit" disabled={loading} className="btn-auth-premium" style={{marginTop: '30px'}}>
+          <button 
+            type="submit" 
+            disabled={loading} 
+            className="btn-auth-premium"
+            style={{marginTop: '30px'}}
+          >
             <span>{loading ? 'Түр хүлээнэ үү...' : 'Бүртгэл үүсгэх'}</span>
             {!loading && <FiArrowRight className="btn-icon" />}
-            <div className="btn-glow"></div>
           </button>
         </form>
 

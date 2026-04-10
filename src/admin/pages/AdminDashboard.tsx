@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../store';
+import { useAdminAuthStore } from '../../store';
 import { bookingsAPI, servicesAPI, usersAPI } from '../../services/api';
 import { Sidebar } from '../components/Sidebar';
 import { TopBar } from '../components/TopBar';
@@ -20,7 +20,7 @@ import '../styles/Button.css';
 
 export const AdminDashboard = () => {
   const navigate = useNavigate();
-  const { user } = useAuthStore();
+  const { user } = useAdminAuthStore();
 
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [services, setServices] = useState<Service[]>([]);

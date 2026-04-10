@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../store';
-import { FiSearch, FiUser, FiMenu } from 'react-icons/fi';
+import { useAuthStore, useCartStore, useThemeStore } from '../../store';
+import { FiSearch, FiUser, FiMenu, FiShoppingCart, FiTrash2, FiSun, FiMoon } from 'react-icons/fi';
 import './Header.css';
 
 export const Header: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuthStore();
+  const { items: cartItems, removeItem, clearCart } = useCartStore();
+  const { theme, toggleTheme } = useThemeStore();
   const [searchQuery, setSearchQuery] = useState('');
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const navigate = useNavigate();
+
+  const cartItemsCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  const cartTotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,6 +50,7 @@ export const Header: React.FC = () => {
 
           <div className="header-right">
             <nav className="desktop-nav">
+              <Link to="/" className="nav-link">Нүүр</Link>
               <Link to="/services" className="nav-link">Үйлчилгээ</Link>
               <Link to="/parts" className="nav-link">Сэлбэг</Link>
             </nav>
@@ -62,6 +69,60 @@ export const Header: React.FC = () => {
                 <span>Нэвтрэх</span>
               </Link>
             )}
+            
+            <div className="cart-wrapper">
+              <button className="cart-toggle-btn" onClick={() => setIsCartOpen(!isCartOpen)}>
+                <FiShoppingCart size={20} />
+                {cartItemsCount > 0 && <span className="cart-badge">{cartItemsCount}</span>}
+              </button>
+              
+              {isCartOpen && (
+                <div className="cart-dropdown">
+                  <div className="cart-header">
+                    <h3>Таны сагс</h3>
+                    <button onClick={() => setIsCartOpen(false)} className="close-cart">&times;</button>
+                  </div>
+                  <div className="cart-body">
+                    {cartItems.length === 0 ? (
+                      <p className="empty-cart">Сагс хоосон байна</p>
+                    ) : (
+                      cartItems.map(item => (
+                        <div key={item.id} className="cart-item">
+                          <div className="cart-item-info">
+                            <span className="cart-item-name">{item.name}</span>
+                            <span className="cart-item-price">{item.quantity} x ₮{item.price.toLocaleString()}</span>
+                          </div>
+                          <button onClick={() => removeItem(item.id)} className="remove-item-btn">
+                            <FiTrash2 size={16} />
+                          </button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                  {cartItems.length > 0 && (
+                     <div className="cart-footer">
+                       <div className="cart-total">
+                         <span>Нийт:</span>
+                         <span>₮{cartTotal.toLocaleString()}</span>
+                       </div>
+                       <button className="checkout-btn" onClick={() => {
+                         alert('Захиалга амжилттай бүртгэгдлээ! (Загвар)');
+                         clearCart();
+                         setIsCartOpen(false);
+                       }}>
+                         Захиалах
+                       </button>
+                     </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Theme Toggle Button */}
+            <button className="theme-toggle-btn" onClick={toggleTheme} aria-label="Toggle theme">
+              {theme === 'dark' ? <FiSun size={20} /> : <FiMoon size={20} />}
+            </button>
+
             <button className="mobile-menu-btn">
               <FiMenu size={24} />
             </button>

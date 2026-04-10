@@ -11,6 +11,7 @@ import { userRoutes } from './routes/users.js';
 import { partRoutes } from './routes/parts.js';
 import { uploadRoutes } from './routes/upload.js';
 import { vehicleRoutes } from './routes/vehicles.js';
+import { webhookRoutes } from './routes/webhook.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,6 +45,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/parts', partRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/vehicles', vehicleRoutes);
+app.use('/api/webhook', webhookRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

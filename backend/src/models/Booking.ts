@@ -6,7 +6,7 @@ interface IBooking {
   date: string;
   time: string;
   brand?: string;
-  status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
+  status: 'payment_pending' | 'pending' | 'confirmed' | 'completed' | 'cancelled';
   notes?: string;
   createdAt: Date;
 }
@@ -18,7 +18,7 @@ const bookingSchema = new Schema<IBooking>(
     date: { type: String, required: true },
     time: { type: String, required: true },
     brand: { type: String, default: 'Бүх марк' },
-    status: { type: String, enum: ['pending', 'confirmed', 'completed', 'cancelled'], default: 'pending' },
+    status: { type: String, enum: ['payment_pending', 'pending', 'confirmed', 'completed', 'cancelled'], default: 'payment_pending' },
     notes: { type: String },
   },
   { timestamps: true }

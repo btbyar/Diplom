@@ -75,7 +75,7 @@
 }
 
 .admin-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #667eea;
   color: white;
   padding: 30px;
   border-radius: 10px;
@@ -512,7 +512,7 @@ input[type="number"] {
 }
 
 .stat-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #667eea;
   color: white;
   padding: 25px;
   border-radius: 10px;
@@ -539,15 +539,15 @@ input[type="number"] {
 }
 
 .stat-card.confirmed {
-  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  background: #27ae60;
 }
 
 .stat-card.pending {
-  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  background: #f39c12;
 }
 
 .stat-card.completed {
-  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  background: #f39c12;
 }
 
 .empty-message {

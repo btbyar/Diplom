@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { useAuthStore } from './store';
+import { useAuthStore, useAdminAuthStore, useThemeStore } from './store';
 
 // Admin Pages
 import { Login as AdminLogin } from './admin/pages/Login';
@@ -11,6 +11,7 @@ import { PartsPage as AdminPartsPage } from './admin/pages/PartsPage';
 import { UsersPage } from './admin/pages/UsersPage';
 import { AnalyticsPage } from './admin/pages/AnalyticsPage';
 import { VehiclesPage } from './admin/pages/VehiclesPage';
+import { PaymentsPage } from './admin/pages/PaymentsPage';
 
 // Client Pages
 import { MainLayout } from './components/layout/MainLayout';
@@ -21,28 +22,33 @@ import { BookingPage } from './pages/BookingPage';
 import { Login as ClientLogin } from './pages/Login';
 import { Register as ClientRegister } from './pages/Register';
 import { ProfilePage } from './pages/ProfilePage';
+import { PaymentSuccess } from './pages/PaymentSuccess';
 
 import './App.css';
 
 const ThemeManager = () => {
   const location = useLocation();
+  const { theme } = useThemeStore();
   
   useEffect(() => {
     if (location.pathname.startsWith('/admin')) {
       document.body.className = 'admin-theme';
+      document.documentElement.removeAttribute('data-theme');
     } else {
       document.body.className = 'client-theme';
+      document.documentElement.setAttribute('data-theme', theme);
     }
-  }, [location.pathname]);
+  }, [location.pathname, theme]);
 
   return null;
 };
 
 function App() {
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated: isClientAuthenticated } = useAuthStore();
+  const { isAuthenticated: isAdminAuthenticated, user: adminUser } = useAdminAuthStore();
   
   // Basic role check
-  const isAdmin = isAuthenticated && user?.role === 'admin';
+  const isAdmin = isAdminAuthenticated && adminUser?.role === 'admin';
 
   return (
     <Router>
@@ -77,6 +83,10 @@ function App() {
           element={isAdmin ? <VehiclesPage /> : <Navigate to="/admin/login" />}
         />
         <Route
+          path="/admin/payments"
+          element={isAdmin ? <PaymentsPage /> : <Navigate to="/admin/login" />}
+        />
+        <Route
           path="/admin/analytics"
           element={isAdmin ? <AnalyticsPage /> : <Navigate to="/admin/login" />}
         />
@@ -87,11 +97,12 @@ function App() {
           <Route path="parts" element={<ClientPartsPage />} />
           <Route path="services" element={<ClientServicesPage />} />
           <Route path="book" element={<BookingPage />} />
+          <Route path="payment-success" element={<PaymentSuccess />} />
           
           {/* Client Auth Routes */}
-          <Route path="login" element={isAuthenticated ? <Navigate to="/" /> : <ClientLogin />} />
-          <Route path="register" element={isAuthenticated ? <Navigate to="/" /> : <ClientRegister />} />
-          <Route path="profile" element={isAuthenticated ? <ProfilePage /> : <Navigate to="/login" />} />
+          <Route path="login" element={isClientAuthenticated ? <Navigate to="/" /> : <ClientLogin />} />
+          <Route path="register" element={isClientAuthenticated ? <Navigate to="/" /> : <ClientRegister />} />
+          <Route path="profile" element={isClientAuthenticated ? <ProfilePage /> : <Navigate to="/login" />} />
         </Route>
       </Routes>
     </Router>

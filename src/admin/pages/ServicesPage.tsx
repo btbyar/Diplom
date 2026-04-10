@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../store';
+import { useAdminAuthStore } from '../../store';
 import { servicesAPI } from '../../services/api';
 import { Sidebar } from '../components/Sidebar';
 import { TopBar } from '../components/TopBar';
@@ -14,7 +14,7 @@ import '../styles/Layout.css';
 
 export const ServicesPage = () => {
   const navigate = useNavigate();
-  const { user } = useAuthStore();
+  const { user } = useAdminAuthStore();
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
