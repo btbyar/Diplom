@@ -86,7 +86,7 @@ body.client-theme {
   background-image: var(--gradient-bg);
   background-attachment: fixed;
   color: var(--text-primary);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', 'Noto Sans', system-ui, -apple-system, sans-serif;
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
@@ -153,7 +153,7 @@ body.client-theme {
 .client-theme h6 {
   color: var(--primary-color);
   margin-top: 0;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Outfit', 'Noto Sans', sans-serif;
   font-weight: 600;
   letter-spacing: -0.02em;
 }
