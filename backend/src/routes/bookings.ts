@@ -35,6 +35,25 @@ bookingRoutes.get('/:id', authenticate, async (req: Request, res: Response) => {
   }
 });
 
+// Public: confirm payment for booking (called from success page)
+bookingRoutes.post('/:id/confirm-payment', async (req: Request, res: Response) => {
+  try {
+    const booking = await Booking.findByIdAndUpdate(
+      req.params.id,
+      { status: 'confirmed' },
+      { new: true }
+    );
+    if (booking) {
+      console.log(`Booking ${req.params.id} confirmed via success page`);
+      res.json({ success: true, booking });
+    } else {
+      res.status(404).json({ error: 'Захиалга олдсонгүй' });
+    }
+  } catch (error: any) {
+    res.status(500).json({ error: 'Сервер алдаа' });
+  }
+});
+
 // Authenticated user: create booking — userId is taken from token, NOT from body
 bookingRoutes.post('/', authenticate, async (req: AuthRequest, res: Response) => {
   try {

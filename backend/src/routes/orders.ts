@@ -55,6 +55,25 @@ orderRoutes.get('/my/list', authenticate, async (req: AuthRequest, res: Response
   }
 });
 
+// Public: confirm payment for order (called from success page)
+orderRoutes.post('/:id/confirm-payment', async (req: Request, res: Response) => {
+  try {
+    const order = await Order.findByIdAndUpdate(
+      req.params.id,
+      { paymentStatus: 'paid', status: 'processing' },
+      { new: true }
+    );
+    if (order) {
+      console.log(`Order ${req.params.id} confirmed via success page`);
+      res.json({ success: true, order });
+    } else {
+      res.status(404).json({ error: 'Захиалга олдсонгүй' });
+    }
+  } catch (error: any) {
+    res.status(500).json({ error: 'Сервер алдаа' });
+  }
+});
+
 // User: create order
 orderRoutes.post('/', authenticate, async (req: AuthRequest, res: Response) => {
   try {

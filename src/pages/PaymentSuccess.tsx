@@ -9,20 +9,17 @@ export const PaymentSuccess: React.FC = () => {
 
   useEffect(() => {
     const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
-    const webhookUrl = apiUrl.replace('/api', '') + '/api/webhook/byl';
 
     if (bookingId) {
-      fetch(`${webhookUrl}?booking_id=${bookingId}`, {
+      fetch(`${apiUrl}/bookings/${bookingId}/confirm-payment`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: 'paid' })
       }).catch(console.error);
     }
     if (orderId) {
-      fetch(`${webhookUrl}?order_id=${orderId}`, {
+      fetch(`${apiUrl}/orders/${orderId}/confirm-payment`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: 'paid' })
       }).catch(console.error);
     }
 
