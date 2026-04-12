@@ -126,7 +126,7 @@ bookingRoutes.post('/', authenticate, async (req: AuthRequest, res: Response) =>
             }
           ],
           success_url: `${frontendUrl}/payment-success?booking_id=${newBooking._id}`,
-          cancel_url: `${frontendUrl}/`,
+          cancel_url: `${frontendUrl}/payment-cancelled?booking_id=${newBooking._id}`,
           client_reference_id: newBooking._id.toString()
         })
       });

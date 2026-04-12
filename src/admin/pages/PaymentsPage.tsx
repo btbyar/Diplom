@@ -7,7 +7,7 @@ import { TopBar } from '../components/TopBar';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Table } from '../components/Table';
-import { FiRefreshCw, FiCheckCircle, FiClock, FiXCircle, FiDollarSign } from 'react-icons/fi';
+import { FiRefreshCw, FiCheckCircle, FiClock, FiXCircle, FiDollarSign, FiTrash2 } from 'react-icons/fi';
 import type { Booking } from '../../types';
 import '../styles/Layout.css';
 
@@ -65,6 +65,17 @@ export const PaymentsPage = () => {
       ));
     } catch (err) {
       console.error('Error cancelling:', err);
+    }
+  };
+
+  const handleDelete = async (booking: Booking) => {
+    if (!window.confirm('Энэ захиалгыг устгах уу?')) return;
+    const id = booking._id || booking.id || '';
+    try {
+      await bookingsAPI.delete(id);
+      setBookings(prev => prev.filter(b => b._id !== id && b.id !== id));
+    } catch (err) {
+      console.error('Error deleting:', err);
     }
   };
 
@@ -222,6 +233,16 @@ export const PaymentsPage = () => {
                         onClick={() => handleCancel(booking)}
                       >
                         Цуцлах
+                      </Button>
+                    )}
+                    {isCancelled && (
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        icon={<FiTrash2 size={14} />}
+                        onClick={() => handleDelete(booking)}
+                      >
+                        Устгах
                       </Button>
                     )}
                   </div>

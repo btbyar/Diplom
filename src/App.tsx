@@ -25,6 +25,7 @@ import { Login as ClientLogin } from './pages/Login';
 import { Register as ClientRegister } from './pages/Register';
 import { ProfilePage } from './pages/ProfilePage';
 import { PaymentSuccess } from './pages/PaymentSuccess';
+import { PaymentCancelled } from './pages/PaymentCancelled';
 import { CheckoutPage } from './pages/CheckoutPage';
 
 import './App.css';
@@ -32,7 +33,7 @@ import './App.css';
 const ThemeManager = () => {
   const location = useLocation();
   const { theme } = useThemeStore();
-  
+
   useEffect(() => {
     if (location.pathname.startsWith('/admin')) {
       document.body.className = 'admin-theme';
@@ -49,7 +50,7 @@ const ThemeManager = () => {
 function App() {
   const { isAuthenticated: isClientAuthenticated } = useAuthStore();
   const { isAuthenticated: isAdminAuthenticated, user: adminUser } = useAdminAuthStore();
-  
+
   // Basic role check
   const isAdmin = isAdminAuthenticated && adminUser?.role === 'admin';
 
@@ -59,7 +60,7 @@ function App() {
       <Routes>
         {/* Admin Auth Route */}
         <Route path="/admin/login" element={<AdminLogin />} />
-        
+
         {/* Admin Routes - Protected */}
         <Route
           path="/admin"
@@ -97,7 +98,7 @@ function App() {
           path="/admin/analytics"
           element={isAdmin ? <AnalyticsPage /> : <Navigate to="/admin/login" />}
         />
-        
+
         {/* Public Client Routes */}
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
@@ -106,15 +107,16 @@ function App() {
           <Route path="book" element={<BookingPage />} />
           <Route path="checkout" element={<CheckoutPage />} />
           <Route path="payment-success" element={<PaymentSuccess />} />
-          
+          <Route path="payment-cancelled" element={<PaymentCancelled />} />
+
           {/* Client Auth Routes */}
           <Route path="login" element={isClientAuthenticated ? <Navigate to="/" /> : <ClientLogin />} />
           <Route path="register" element={isClientAuthenticated ? <Navigate to="/" /> : <ClientRegister />} />
           <Route path="profile" element={isClientAuthenticated ? <ProfilePage /> : <Navigate to="/login" />} />
         </Route>
       </Routes>
-      <Toaster 
-        position="top-right" 
+      <Toaster
+        position="top-right"
         toastOptions={{
           style: {
             background: 'rgba(10, 22, 40, 0.95)',
@@ -134,7 +136,7 @@ function App() {
               secondary: '#fff',
             },
           },
-        }} 
+        }}
       />
     </Router>
   );

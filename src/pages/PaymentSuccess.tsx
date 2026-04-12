@@ -23,7 +23,7 @@ export const PaymentSuccess: React.FC = () => {
       }).catch(console.error);
     }
 
-    return () => {};
+    return () => { };
   }, [bookingId, orderId]);
 
   return (
@@ -35,14 +35,14 @@ export const PaymentSuccess: React.FC = () => {
           Таны захиалга болон төлбөр амжилттай баталгаажлаа. Бид танилцаад удахгүй холбогдох болно.
         </p>
         {bookingId && (
-           <p style={{ fontSize: '14px', color: '#666', marginBottom: '20px' }}>
-             Цаг захиалгын дугаар: <strong>{bookingId}</strong>
-           </p>
+          <p style={{ fontSize: '14px', color: '#666', marginBottom: '20px' }}>
+            Цаг захиалгын дугаар: <strong>{bookingId}</strong>
+          </p>
         )}
         {orderId && (
-           <p style={{ fontSize: '14px', color: '#666', marginBottom: '20px' }}>
-             Сэлбэг захиалгын дугаар: <strong>{orderId}</strong>
-           </p>
+          <p style={{ fontSize: '14px', color: '#666', marginBottom: '20px' }}>
+            Сэлбэг захиалгын дугаар: <strong>{orderId}</strong>
+          </p>
         )}
         <Link to="/" className="btn-primary" style={{ display: 'inline-block' }}>
           Нүүр хуудас руу буцах

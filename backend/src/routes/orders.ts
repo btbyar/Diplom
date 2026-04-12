@@ -74,6 +74,24 @@ orderRoutes.post('/:id/confirm-payment', async (req: Request, res: Response) => 
   }
 });
 
+// Public: cancel order payment — deletes pending order
+orderRoutes.delete('/:id/cancel-payment', async (req: Request, res: Response) => {
+  try {
+    const order = await Order.findOneAndDelete({
+      _id: req.params.id,
+      paymentStatus: 'pending'
+    });
+    if (order) {
+      console.log(`Order ${req.params.id} deleted due to payment cancellation`);
+      res.json({ success: true });
+    } else {
+      res.status(404).json({ error: 'Захиалга олдсонгүй эсвэл аль хэдийн баталгаажсан' });
+    }
+  } catch (error: any) {
+    res.status(500).json({ error: 'Сервер алдаа' });
+  }
+});
+
 // User: create order
 orderRoutes.post('/', authenticate, async (req: AuthRequest, res: Response) => {
   try {
@@ -105,7 +123,7 @@ orderRoutes.post('/', authenticate, async (req: AuthRequest, res: Response) => {
         res.status(400).json({ error: `${part.name} үлдэгдэл хүрэлцэхгүй байна.` });
         return;
       }
-      
+
       const itemTotal = part.price * item.quantity;
       totalAmount += itemTotal;
 
@@ -127,7 +145,7 @@ orderRoutes.post('/', authenticate, async (req: AuthRequest, res: Response) => {
         },
         quantity: item.quantity
       });
-      
+
       // Optionally decrement stock here:
       // await Part.findByIdAndUpdate(part._id, { $inc: { quantity: -item.quantity } });
     }
