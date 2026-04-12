@@ -8,23 +8,25 @@ export const PaymentSuccess: React.FC = () => {
   const orderId = searchParams.get('order_id');
 
   useEffect(() => {
-    // Optionally trigger a backend check or webhook mock if needed for test mode
-    if (bookingId && import.meta.env.MODE === 'development') {
-       fetch(`http://localhost:3000/api/webhook/byl?booking_id=${bookingId}`, {
-           method: 'POST',
-           headers: { 'Content-Type': 'application/json' },
-           body: JSON.stringify({ status: 'paid' })
-       }).catch(console.error);
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+    const webhookUrl = apiUrl.replace('/api', '') + '/api/webhook/byl';
+
+    if (bookingId) {
+      fetch(`${webhookUrl}?booking_id=${bookingId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'paid' })
+      }).catch(console.error);
     }
-    if (orderId && import.meta.env.MODE === 'development') {
-       fetch(`http://localhost:3000/api/webhook/byl?order_id=${orderId}`, {
-           method: 'POST',
-           headers: { 'Content-Type': 'application/json' },
-           body: JSON.stringify({ status: 'paid' })
-       }).catch(console.error);
+    if (orderId) {
+      fetch(`${webhookUrl}?order_id=${orderId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'paid' })
+      }).catch(console.error);
     }
 
-    return () => {}; // No timer needed
+    return () => {};
   }, [bookingId, orderId]);
 
   return (
