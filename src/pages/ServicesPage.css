@@ -1,72 +1,86 @@
-/* Premium List Theme for Services Page */
+/* Premium Dark Navy Theme for Services Page — matches HomePage */
+
 .client-services-page {
   min-height: 100vh;
   padding-bottom: 120px;
   position: relative;
   z-index: 1;
+  background: #0a1628;
 }
 
-/* Page Header */
+/* ── Page Header ────────────────────────────────────────── */
 .page-header {
   padding: 100px 0 60px;
   text-align: center;
   position: relative;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   margin-bottom: 40px;
+  overflow: hidden;
 }
 
+/* dot-grid — same as hero */
 .page-header::before {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100vw;
-  height: 300px;
-  background: none;
-  z-index: -1;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
   pointer-events: none;
 }
 
+/* orange glare — same as hero */
+.page-header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 80% at 70% 50%, rgba(224, 93, 16, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.page-header .container {
+  position: relative;
+  z-index: 2;
+}
+
 .page-header h1 {
-  font-size: 3.5rem;
-  margin-bottom: 16px;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 900;
   letter-spacing: -1px;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
-  text-shadow: 0 0 30px rgba(138, 43, 226, 0.3);
+  color: #ffffff !important;
+  text-transform: uppercase;
+  margin: 0 0 16px 0;
+  line-height: 1.05;
 }
 
 .page-header p {
-  color: var(--text-secondary);
-  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 1.1rem;
   max-width: 600px;
   margin: 0 auto;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
-/* Loading & Empty */
+/* ── Loading & Empty ─────────────────────────────────────── */
 .loading-state,
 .empty-state {
   text-align: center;
   padding: 60px 0;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  border-radius: var(--radius-lg);
-  border: var(--glass-border);
-  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.65);
   font-size: 1.1rem;
 }
 
-/* Services List View */
+/* ── Services List ────────────────────────────────────────── */
 .services-list-view {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-width: 1000px; /* Constrain width for readable rows */
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -74,20 +88,35 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  border: var(--glass-border);
-  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
   padding: 24px 30px;
-  transition: all var(--transition-normal);
+  transition: all 0.25s ease;
   position: relative;
   overflow: hidden;
 }
 
+.service-row::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(224, 93, 16, 0.05), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
 .service-row:hover {
-  border-color: var(--border-light);
-  box-shadow: var(--shadow-md);
+  border-color: rgba(224, 93, 16, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
   transform: translateX(4px);
+}
+
+.service-row:hover::before {
+  opacity: 1;
 }
 
 .service-row-left {
@@ -95,20 +124,28 @@
   align-items: center;
   gap: 24px;
   flex: 1;
+  position: relative;
+  z-index: 1;
 }
 
 .service-icon-box {
   width: 64px;
   height: 64px;
-  border-radius: var(--radius-md);
-  background: rgba(0, 240, 255, 0.1);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 10px;
+  background: rgba(224, 93, 16, 0.12);
+  border: 1px solid rgba(224, 93, 16, 0.25);
   display: flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  color: var(--accent-color);
+  color: #f08030;
   font-size: 28px;
+  transition: all 0.25s ease;
+}
+
+.service-row:hover .service-icon-box {
+  background: rgba(224, 93, 16, 0.2);
+  border-color: rgba(224, 93, 16, 0.45);
 }
 
 .service-info {
@@ -118,17 +155,18 @@
 }
 
 .service-name {
-  font-size: 1.35rem;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-size: 1.25rem;
   font-weight: 700;
-  color: var(--primary-color);
+  color: #ffffff !important;
   margin: 0;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.3px;
 }
 
 .service-desc {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.65) !important;
+  font-size: 0.9rem;
+  line-height: 1.6;
   margin: 0;
   max-width: 500px;
 }
@@ -136,32 +174,34 @@
 .service-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 8px;
+  gap: 10px;
+  margin-top: 6px;
 }
 
 .meta-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 6px 12px;
-  border-radius: var(--radius-pill);
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .meta-badge svg {
-  color: var(--accent-color);
+  color: #f08030;
 }
 
 .service-row-right {
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 32px;
   padding-left: 24px;
-  border-left: 1px solid var(--border-color);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  z-index: 1;
 }
 
 .service-price {
@@ -171,62 +211,85 @@
 }
 
 .price-label {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.4);
   font-weight: 600;
   margin-bottom: 4px;
 }
 
 .price-val {
+  font-family: 'Outfit', 'Inter', sans-serif;
   font-size: 1.5rem;
   font-weight: 800;
-  color: var(--primary-color);
+  color: #ffffff;
 }
 
+/* ── Book Button — homepage style ────────────────────────── */
 .btn-book-row {
-  background: var(--primary-color);
-  color: var(--bg-color);
-  padding: 14px 28px;
-  border-radius: var(--radius-pill);
+  background: rgba(224, 93, 16, 0.1);
+  border: 1px solid rgba(224, 93, 16, 0.3);
+  color: #f08030;
+  padding: 12px 24px;
+  border-radius: 8px;
   text-decoration: none;
-  font-weight: 600;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.86rem;
+  letter-spacing: 0.02em;
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: all var(--transition-fast);
-  border: none;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
   white-space: nowrap;
+  cursor: pointer;
+}
+
+.btn-book-row::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #e05d10, #f07820);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.btn-book-row:hover::before {
+  opacity: 1;
+}
+
+.btn-book-row > * {
+  position: relative;
+  z-index: 1;
 }
 
 .btn-book-row:hover {
-  background: var(--accent-color);
+  border-color: transparent;
   color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(224, 93, 16, 0.45);
 }
 
-/* Add light mode specific tweaks if necessary, though variables handle it */
-:root[data-theme='light'] .meta-badge {
-  background: rgba(255, 255, 255, 0.5);
-}
-
-/* Responsive constraints */
+/* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 900px) {
   .service-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 24px;
+    gap: 20px;
   }
+
   .service-row-right {
     width: 100%;
     padding-left: 0;
     border-left: none;
-    border-top: 1px solid var(--border-color);
-    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 20px;
     justify-content: space-between;
   }
+
   .service-price {
     align-items: flex-start;
   }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { useAdminAuthStore } from '../../store';
 import { bookingsAPI, servicesAPI } from '../../services/api';
 import { Sidebar } from '../components/Sidebar';
@@ -28,7 +29,7 @@ export const BookingsPage = () => {
     date: string;
     time: string;
     brand: string;
-    status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
+    status: 'payment_pending' | 'pending' | 'confirmed' | 'completed' | 'cancelled';
     notes: string;
   }>({
     userId: '',
@@ -103,7 +104,7 @@ export const BookingsPage = () => {
 
   const handleSave = async () => {
     if (!formData.serviceId || !formData.date || !formData.time || !formData.userId) {
-      alert('Хэрэглэгч, үйлчилгээ, огноо, цаг заавал бөглөнө үү.');
+      toast.error('Хэрэглэгч, үйлчилгээ, огноо, цаг заавал бөглөнө үү.');
       return;
     }
 
@@ -124,9 +125,10 @@ export const BookingsPage = () => {
 
       setShowModal(false);
       setEditingBooking(null);
+      toast.success('Захиалга хадгалагдлаа');
     } catch (err: any) {
       console.error('Error saving booking:', err);
-      alert(err.response?.data?.error || 'Хадгалахад алдаа гарлаа');
+      toast.error(err.response?.data?.error || 'Хадгалахад алдаа гарлаа');
     }
   };
 
@@ -159,6 +161,7 @@ export const BookingsPage = () => {
       label: 'Төлөв',
       render: (val: any) => {
         const statusMap: Record<string, string> = {
+          'payment_pending': 'Төлбөр хүлээгдэж буй',
           'pending': 'Хүлээгдэж буй',
           'confirmed': 'Баталгаажсан',
           'completed': 'Дууссан',
@@ -304,9 +307,10 @@ export const BookingsPage = () => {
                 <label>Төлөв</label>
                 <select
                   value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value as 'pending' | 'confirmed' | 'completed' | 'cancelled' })}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value as 'payment_pending' | 'pending' | 'confirmed' | 'completed' | 'cancelled' })}
                   disabled={!editingBooking} // status is pending for new
                 >
+                  <option value="payment_pending">Төлбөр хүлээгдэж буй</option>
                   <option value="pending">Хүлээгдэж буй</option>
                   <option value="confirmed">Баталгаажсан</option>
                   <option value="completed">Дууссан</option>

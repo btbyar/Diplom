@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useAuthStore } from '../store';
 import { usersAPI, authAPI, vehiclesAPI } from '../services/api';
@@ -10,9 +11,9 @@ export const Register: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuthStore();
-  
+
   const from = location.state?.from || '/';
-  
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -23,7 +24,6 @@ export const Register: React.FC = () => {
     modelName: '',
     plateNumber: '',
   });
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,10 +32,9 @@ export const Register: React.FC = () => {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Нууц үгнүүд тохирохгүй байна.');
+      toast.error('Нууц үгнүүд тохирохгүй байна.');
       return;
     }
 
@@ -54,19 +53,18 @@ export const Register: React.FC = () => {
       // 2. Login newly created user to get token
       const response = await authAPI.login({ email: formData.email, password: formData.password });
       const { token, user } = response.data;
-      
+
       // Save token directly to local storage so subsequent API calls use it
       localStorage.setItem('auth_token', token);
       login(user, token);
-      
+
       // 3. Register user's vehicle
       if (formData.plateNumber && formData.make && formData.modelName) {
         try {
           await vehiclesAPI.create({
-            ownerId: user.id || user._id,
             plateNumber: formData.plateNumber,
             make: formData.make,
-            modelName: formData.modelName
+            modelName: formData.modelName,
           });
         } catch (vehicleErr) {
           console.error("Failed to register vehicle:", vehicleErr);
@@ -75,11 +73,12 @@ export const Register: React.FC = () => {
       }
 
       navigate(from, { replace: true });
+      toast.success('Бүртгэл амжилттай үүслээ!');
     } catch (err: unknown) {
       if (axios.isAxiosError<{ error?: string; message?: string }>(err)) {
-        setError(err.response?.data?.error || err.response?.data?.message || 'Бүртгүүлэхэд алдаа гарлаа.');
+        toast.error(err.response?.data?.error || err.response?.data?.message || 'Бүртгүүлэхэд алдаа гарлаа.');
       } else {
-        setError('Бүртгүүлэхэд алдаа гарлаа.');
+        toast.error('Бүртгүүлэхэд алдаа гарлаа.');
       }
     } finally {
       setLoading(false);
@@ -98,7 +97,7 @@ export const Register: React.FC = () => {
         <Link to="/" className="auth-logo-center">
           <span className="logo-text">X</span><span className="logo-text-highlight">pand</span>
         </Link>
-        
+
         <div className="auth-header-premium">
           <h2>Шинээр бүртгүүлэх</h2>
           <p>Xpand ертөнцөд нэгдэж, үйлчилгээгээ хялбарчил</p>
@@ -227,13 +226,11 @@ export const Register: React.FC = () => {
             />
           </div>
 
-          {error && <div className="auth-error-premium">{error}</div>}
-
-          <button 
-            type="submit" 
-            disabled={loading} 
+          <button
+            type="submit"
+            disabled={loading}
             className="btn-auth-premium"
-            style={{marginTop: '30px'}}
+            style={{ marginTop: '30px' }}
           >
             <span>{loading ? 'Түр хүлээнэ үү...' : 'Бүртгэл үүсгэх'}</span>
             {!loading && <FiArrowRight className="btn-icon" />}

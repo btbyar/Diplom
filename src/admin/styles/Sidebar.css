@@ -5,8 +5,8 @@
   top: 0;
   height: 100vh;
   width: 260px;
-  background: #252b3b;
-  border-right: 1px solid #333b4d;
+  background: rgba(10, 22, 40, 0.95);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
   padding: 0;
@@ -16,7 +16,7 @@
 
 .sidebar-header {
   padding: 20px;
-  border-bottom: 1px solid #333b4d;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -97,7 +97,7 @@
 
 .sidebar-footer {
   padding: 20px;
-  border-top: 1px solid #333b4d;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .logout-btn {

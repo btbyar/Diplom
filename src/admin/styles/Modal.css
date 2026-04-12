@@ -24,8 +24,8 @@
 }
 
 .modal-content {
-  background: #0f3460;
-  border: 1px solid #2d3561;
+  background: #0d1f3c;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   width: 90%;
   max-width: 500px;

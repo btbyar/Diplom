@@ -4,6 +4,9 @@ import { FiShoppingCart, FiArrowRight, FiCheck, FiCalendar, FiTool, FiShield, Fi
 import { partsAPI, servicesAPI } from '../services/api';
 import { useCartStore } from '../store';
 import type { Part, Service } from '../types';
+import { Skeleton } from '../components/ui/Skeleton';
+import { PartModal } from '../components/parts/PartModal';
+import toast from 'react-hot-toast';
 import './HomePage.css';
 
 const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:3000';
@@ -14,6 +17,7 @@ export const HomePage: React.FC = () => {
   const [addedItems, setAddedItems] = useState<Record<string, boolean>>({});
   const [services, setServices] = useState<Service[]>([]);
   const [loadingServices, setLoadingServices] = useState(true);
+  const [selectedPart, setSelectedPart] = useState<Part | null>(null);
 
   const { addItem } = useCartStore();
 
@@ -45,6 +49,18 @@ export const HomePage: React.FC = () => {
     setTimeout(() => setAddedItems(prev => ({ ...prev, [partId]: false })), 2000);
   };
 
+  const handleModalAddToCart = (part: Part, quantity: number) => {
+    const partId = part._id || part.id || '';
+    addItem({
+      id: partId,
+      name: part.name,
+      price: part.price,
+      quantity: quantity,
+      imageUrl: part.imageUrl
+    });
+    toast.success(`${part.name} (${quantity}ш) сагсанд нэмэгдлээ`);
+  };
+
   const stats = [
     { icon: <FiClock />, value: '10+', label: 'Жилийн туршлага' },
     { icon: <FiTool />, value: '5000+', label: 'Хийсэн засвар' },
@@ -58,7 +74,7 @@ export const HomePage: React.FC = () => {
       <section className="hero-section">
         <div className="hero-bg-overlay" />
 
-        <div className="hero-inner container">
+        <div className="hero-inner container animate-slide-up">
           {/* Left content */}
           <div className="hero-text">
             <h1 className="hero-title">
@@ -116,17 +132,11 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
 
-        {/* Wave separator */}
-        <div className="hero-wave">
-          <svg viewBox="0 0 1440 60" preserveAspectRatio="none">
-            <path d="M0,60 C360,0 1080,60 1440,20 L1440,60 Z" fill="var(--page-bg, #0b0f1a)" />
-          </svg>
-        </div>
       </section>
 
       {/* ── Services ── */}
       <section className="services-section">
-        <div className="container">
+        <div className="container animate-slide-up">
           <div className="section-header">
             <div>
               <h2 className="section-title">БИДНИЙ ҮЙЛЧИЛГЭЭ</h2>
@@ -137,8 +147,12 @@ export const HomePage: React.FC = () => {
           </div>
 
           {loadingServices ? (
-            <div className="loading-state">
-              <div className="loading-dots"><span /><span /><span /></div>
+            <div className="services-grid">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="service-card" style={{ padding: '0', border: 'none', background: 'transparent' }}>
+                  <Skeleton type="card" height="150px" />
+                </div>
+              ))}
             </div>
           ) : services.length === 0 ? (
             <div className="services-empty">
@@ -176,7 +190,7 @@ export const HomePage: React.FC = () => {
 
       {/* ── Featured Parts ── */}
       <section className="featured-parts-section">
-        <div className="container">
+        <div className="container animate-slide-up">
           <div className="section-header">
             <div>
               <h2 className="section-title">СЭЛБЭГҮҮД</h2>
@@ -187,15 +201,17 @@ export const HomePage: React.FC = () => {
           </div>
 
           {loadingParts ? (
-            <div className="loading-state">
-              <div className="loading-dots"><span /><span /><span /></div>
+            <div className="parts-grid">
+              {[...Array(4)].map((_, i) => (
+                <Skeleton key={i} type="card" />
+              ))}
             </div>
           ) : (
             <div className="parts-grid">
               {featuredParts.map(part => {
                 const partId = part._id || part.id || '';
                 return (
-                  <div key={partId} className="part-card">
+                  <div key={partId} className="part-card" onClick={() => setSelectedPart(part)} style={{ cursor: 'pointer' }}>
                     <div className="part-image">
                       {part.imageUrl ? (
                         <img src={`${API_BASE}${part.imageUrl}`} alt={part.name} />
@@ -213,7 +229,7 @@ export const HomePage: React.FC = () => {
                       </div>
                       <button
                         className={`btn-add-cart${addedItems[partId] ? ' added' : ''}`}
-                        onClick={() => handleAddToCart(part)}
+                        onClick={(e) => { e.stopPropagation(); handleAddToCart(part); }}
                       >
                         {addedItems[partId] ? (
                           <><FiCheck /> Нэмэгдлээ</>
@@ -229,6 +245,13 @@ export const HomePage: React.FC = () => {
           )}
         </div>
       </section>
+
+      <PartModal 
+        part={selectedPart}
+        isOpen={!!selectedPart}
+        onClose={() => setSelectedPart(null)}
+        onAddToCart={handleModalAddToCart}
+      />
     </div>
   );
 };

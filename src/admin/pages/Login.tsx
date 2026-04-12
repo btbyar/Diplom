@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useAdminAuthStore } from '../../store';
 import { authAPI } from '../../services/api';
@@ -11,12 +12,10 @@ export const Login = () => {
   const [email, setEmail] = useState('admin@gmail.com');
   const [password, setPassword] = useState('admin123');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
 
     try {
@@ -27,15 +26,16 @@ export const Login = () => {
       localStorage.setItem('admin_auth_token', token);
 
       login(user, token);
+      toast.success('Амжилттай нэвтэрлээ');
       navigate('/admin');
     } catch (err: unknown) {
       console.error('Login алдаа:', err);
       const defaultMessage = 'Нэвтрэхэд алдаа гарлаа. Имэйл болон нууц үгээ шалгаарай.';
 
       if (axios.isAxiosError<{ error?: string }>(err)) {
-        setError(err.response?.data?.error || defaultMessage);
+        toast.error(err.response?.data?.error || defaultMessage);
       } else {
-        setError(defaultMessage);
+        toast.error(defaultMessage);
       }
     } finally {
       setLoading(false);
@@ -150,12 +150,6 @@ export const Login = () => {
                 </button>
               </div>
             </div>
-
-            {error && (
-              <div className="error-message" role="alert">
-                {error}
-              </div>
-            )}
 
             <button type="submit" disabled={loading} className="login-btn">
               {loading ? (

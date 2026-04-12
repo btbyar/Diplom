@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useAuthStore } from '../store';
 import { authAPI } from '../services/api';
@@ -10,17 +11,15 @@ export const Login: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuthStore();
-  
+
   const from = location.state?.from || '/';
-  
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
 
     try {
@@ -29,13 +28,14 @@ export const Login: React.FC = () => {
 
       localStorage.setItem('auth_token', token);
       login(user, token);
-      
+      toast.success('Амжилттай нэвтэрлээ');
+
       navigate(from, { replace: true });
     } catch (err: unknown) {
       if (axios.isAxiosError<{ error?: string }>(err)) {
-        setError(err.response?.data?.error || 'Нэвтрэхэд алдаа гарлаа. Имэйл болон нууц үгээ шалгаарай.');
+        toast.error(err.response?.data?.error || 'Нэвтрэхэд алдаа гарлаа. Имэйл болон нууц үгээ шалгаарай.');
       } else {
-        setError('Нэвтрэхэд алдаа гарлаа.');
+        toast.error('Нэвтрэхэд алдаа гарлаа.');
       }
     } finally {
       setLoading(false);
@@ -54,7 +54,7 @@ export const Login: React.FC = () => {
         <Link to="/" className="auth-logo-center">
           <span className="logo-text">X</span><span className="logo-text-highlight">pand</span>
         </Link>
-        
+
         <div className="auth-header-premium">
           <h2>Тавтай морилно уу</h2>
           <p>Системд нэвтэрч үйлчилгээгээ үргэлжлүүлнэ үү</p>
@@ -90,8 +90,6 @@ export const Login: React.FC = () => {
           <div className="auth-options-premium" style={{ justifyContent: 'flex-end' }}>
             <a href="#" className="forgot-password-premium">Нууц үг сэргээх</a>
           </div>
-
-          {error && <div className="auth-error-premium">{error}</div>}
 
           <button type="submit" disabled={loading} className="btn-auth-premium">
             <span>{loading ? 'Түр хүлээнэ үү...' : 'Нэвтрэх'}</span>

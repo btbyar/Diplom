@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { Part } from '../models/Part.js';
+import { authenticate, requireAdmin } from '../middleware/authMiddleware.js';
 
 export const partRoutes = Router();
 
@@ -27,7 +28,7 @@ partRoutes.get('/:id', async (req: Request, res: Response) => {
   }
 });
 
-partRoutes.post('/', async (req: Request, res: Response) => {
+partRoutes.post('/', authenticate, requireAdmin, async (req: Request, res: Response) => {
   try {
     const { name, description, partNumber, category, brand, price, quantity, imageUrl } = req.body;
 
@@ -68,7 +69,7 @@ partRoutes.post('/', async (req: Request, res: Response) => {
   }
 });
 
-partRoutes.put('/:id', async (req: Request, res: Response) => {
+partRoutes.put('/:id', authenticate, requireAdmin, async (req: Request, res: Response) => {
   try {
     const partId = req.params.id;
     if (!partId) {
@@ -109,7 +110,7 @@ partRoutes.put('/:id', async (req: Request, res: Response) => {
   }
 });
 
-partRoutes.delete('/:id', async (req: Request, res: Response) => {
+partRoutes.delete('/:id', authenticate, requireAdmin, async (req: Request, res: Response) => {
   try {
     const partId = req.params.id;
     if (!partId) {

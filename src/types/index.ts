@@ -66,8 +66,32 @@ export interface Booking {
   date: string;
   time: string;
   brand?: string;
-  status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
+  status: 'payment_pending' | 'pending' | 'confirmed' | 'completed' | 'cancelled';
   notes?: string;
+  paymentUrl?: string;
+  createdAt?: string;
+}
+
+// Auth types
+export interface OrderItem {
+  partId: any;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+export interface Order {
+  _id?: string;
+  id?: string;
+  userId: any;
+  items: OrderItem[];
+  totalAmount: number;
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  deliveryMethod: 'pickup' | 'delivery';
+  shippingAddress?: string;
+  phone: string;
+  paymentMethod: 'cash' | 'transfer' | 'byl';
+  paymentStatus: 'pending' | 'paid';
   createdAt?: string;
 }
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { User, Booking, Service, Part, Vehicle, LoginRequest, UserCreateInput } from '../types';
+import type { User, Booking, Service, Part, Vehicle, LoginRequest, UserCreateInput, Order } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
@@ -33,6 +33,7 @@ export const authAPI = {
 // Bookings API
 export const bookingsAPI = {
   getAll: () => api.get<Booking[]>('/bookings'),
+  getMy: () => api.get<Booking[]>('/bookings/my/list'),
   getById: (id: string) => api.get<Booking>(`/bookings/${id}`),
   create: (booking: Omit<Booking, 'id' | 'createdAt'>) =>
     api.post<Booking>('/bookings', booking),
@@ -88,12 +89,23 @@ export const usersAPI = {
 // Vehicles API
 export const vehiclesAPI = {
   getAll: () => api.get<Vehicle[]>('/vehicles'),
+  getMy: () => api.get<Vehicle[]>('/vehicles/my'),
   getById: (id: string) => api.get<Vehicle>(`/vehicles/${id}`),
   create: (vehicle: Partial<Vehicle>) =>
     api.post<Vehicle>('/vehicles', vehicle),
   update: (id: string, vehicle: Partial<Vehicle>) =>
     api.put<Vehicle>(`/vehicles/${id}`, vehicle),
   delete: (id: string) => api.delete(`/vehicles/${id}`),
+};
+
+// Orders API
+export const ordersAPI = {
+  getAll: () => api.get<Order[]>('/orders'),
+  getMy: () => api.get<Order[]>('/orders/my/list'),
+  getById: (id: string) => api.get<Order>(`/orders/${id}`),
+  create: (data: any) => api.post<{ order: Order; paymentUrl?: string }>('/orders', data),
+  updateStatus: (id: string, update: { status?: string, paymentStatus?: string }) =>
+    api.put<Order>(`/orders/${id}`, update),
 };
 
 export default api;

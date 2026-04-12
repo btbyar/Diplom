@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore, useCartStore } from '../../store';
 import { FiPhone, FiMenu, FiX, FiUser, FiShoppingCart, FiTrash2, FiLogOut } from 'react-icons/fi';
+import { EmptyState } from '../ui/EmptyState';
 import './Header.css';
 
 export const Header: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuthStore();
-  const { items: cartItems, removeItem, clearCart } = useCartStore();
+  const { items: cartItems, removeItem } = useCartStore();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const location = useLocation();
@@ -31,18 +32,8 @@ export const Header: React.FC = () => {
       <div className="header-inner">
         {/* Logo */}
         <Link to="/" className="header-logo">
-          <div className="logo-icon">
-            <svg viewBox="0 0 50 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 22 C5 22 10 8 25 8 C40 8 45 22 45 22" stroke="white" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-              <circle cx="12" cy="23" r="4" stroke="white" strokeWidth="2" fill="none"/>
-              <circle cx="38" cy="23" r="4" stroke="white" strokeWidth="2" fill="none"/>
-              <path d="M8 22 L42 22" stroke="white" strokeWidth="2"/>
-            </svg>
-          </div>
-          <div className="logo-text-block">
-            <span className="logo-top">AUTO</span>
-            <span className="logo-bottom">SERVICE</span>
-          </div>
+          <span className="logo-text">X</span>
+          <span className="logo-text-highlight">pand</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -63,9 +54,9 @@ export const Header: React.FC = () => {
         {/* Right Actions */}
         <div className="header-actions">
           {/* Phone Button */}
-          <a href="tel:+97612345678" className="phone-btn">
+          <a href="tel:88608141" className="phone-btn">
             <FiPhone size={16} />
-            <span>9776 1234 5678</span>
+            <span>88608141</span>
           </a>
 
           {/* Auth */}
@@ -105,7 +96,11 @@ export const Header: React.FC = () => {
                 </div>
                 <div className="cart-body">
                   {cartItems.length === 0 ? (
-                    <p className="empty-cart">Сагс хоосон байна</p>
+                    <EmptyState 
+                      icon={<FiShoppingCart />} 
+                      title="Сагс хоосон байна" 
+                      size="small" 
+                    />
                   ) : (
                     cartItems.map(item => (
                       <div key={item.id} className="cart-item">
@@ -127,8 +122,11 @@ export const Header: React.FC = () => {
                       <span>₮{cartTotal.toLocaleString()}</span>
                     </div>
                     <button className="checkout-btn" onClick={() => {
-                      alert('Захиалга амжилттай бүртгэгдлээ!');
-                      clearCart();
+                      if (!isAuthenticated) {
+                        navigate('/login', { state: { from: '/checkout' } });
+                      } else {
+                        navigate('/checkout');
+                      }
                       setIsCartOpen(false);
                     }}>
                       Захиалах
@@ -159,8 +157,8 @@ export const Header: React.FC = () => {
               {link.label}
             </Link>
           ))}
-          <a href="tel:+97612345678" className="mobile-phone-link">
-            <FiPhone size={16} /> 9776 1234 5678
+          <a href="tel:88608141" className="mobile-phone-link">
+            <FiPhone size={16} /> 88608141
           </a>
         </div>
       )}

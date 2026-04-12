@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { Service } from '../models/Service.js';
+import { authenticate, requireAdmin } from '../middleware/authMiddleware.js';
 
 export const serviceRoutes = Router();
 
@@ -27,7 +28,7 @@ serviceRoutes.get('/:id', async (req: Request, res: Response) => {
   }
 });
 
-serviceRoutes.post('/', async (req: Request, res: Response) => {
+serviceRoutes.post('/', authenticate, requireAdmin, async (req: Request, res: Response) => {
   try {
     const { name, description, price, duration, brand } = req.body;
 
@@ -53,7 +54,7 @@ serviceRoutes.post('/', async (req: Request, res: Response) => {
   }
 });
 
-serviceRoutes.put('/:id', async (req: Request, res: Response) => {
+serviceRoutes.put('/:id', authenticate, requireAdmin, async (req: Request, res: Response) => {
   try {
     const { name, description, price, duration, brand } = req.body;
     const serviceId = req.params.id;
@@ -80,7 +81,7 @@ serviceRoutes.put('/:id', async (req: Request, res: Response) => {
   }
 });
 
-serviceRoutes.delete('/:id', async (req: Request, res: Response) => {
+serviceRoutes.delete('/:id', authenticate, requireAdmin, async (req: Request, res: Response) => {
   try {
     const serviceId = req.params.id;
 

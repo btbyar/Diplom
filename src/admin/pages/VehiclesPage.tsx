@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiEdit2, FiPlus, FiTrash2 } from 'react-icons/fi';
+import toast from 'react-hot-toast';
 import { useAdminAuthStore } from '../../store';
 import { vehiclesAPI, usersAPI } from '../../services/api';
 import type { Vehicle, User } from '../../types';
@@ -88,7 +89,7 @@ export const VehiclesPage = () => {
     const handleSave = async () => {
         const plate = formData.plateNumber.trim();
         if (!plate || !formData.make.trim() || !formData.modelName.trim()) {
-            alert('Улсын дугаар, марк, загвар заавал бөглөнө үү.');
+            toast.error('Улсын дугаар, марк, загвар заавал бөглөнө үү.');
             return;
         }
 
@@ -120,9 +121,10 @@ export const VehiclesPage = () => {
 
             setShowModal(false);
             setEditingVehicle(null);
+            toast.success('Машин амжилттай хадгалагдлаа');
         } catch (err: any) {
             console.error('Error saving vehicle:', err);
-            alert(err.response?.data?.error || 'Хадгалахад алдаа гарлаа');
+            toast.error(err.response?.data?.error || 'Хадгалахад алдаа гарлаа');
         }
     };
 

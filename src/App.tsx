@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import { useAuthStore, useAdminAuthStore, useThemeStore } from './store';
 
 // Admin Pages
@@ -12,6 +13,7 @@ import { UsersPage } from './admin/pages/UsersPage';
 import { AnalyticsPage } from './admin/pages/AnalyticsPage';
 import { VehiclesPage } from './admin/pages/VehiclesPage';
 import { PaymentsPage } from './admin/pages/PaymentsPage';
+import { OrdersPage } from './admin/pages/OrdersPage';
 
 // Client Pages
 import { MainLayout } from './components/layout/MainLayout';
@@ -23,6 +25,7 @@ import { Login as ClientLogin } from './pages/Login';
 import { Register as ClientRegister } from './pages/Register';
 import { ProfilePage } from './pages/ProfilePage';
 import { PaymentSuccess } from './pages/PaymentSuccess';
+import { CheckoutPage } from './pages/CheckoutPage';
 
 import './App.css';
 
@@ -67,6 +70,10 @@ function App() {
           element={isAdmin ? <BookingsPage /> : <Navigate to="/admin/login" />}
         />
         <Route
+          path="/admin/orders"
+          element={isAdmin ? <OrdersPage /> : <Navigate to="/admin/login" />}
+        />
+        <Route
           path="/admin/services"
           element={isAdmin ? <ServicesPage /> : <Navigate to="/admin/login" />}
         />
@@ -97,6 +104,7 @@ function App() {
           <Route path="parts" element={<ClientPartsPage />} />
           <Route path="services" element={<ClientServicesPage />} />
           <Route path="book" element={<BookingPage />} />
+          <Route path="checkout" element={<CheckoutPage />} />
           <Route path="payment-success" element={<PaymentSuccess />} />
           
           {/* Client Auth Routes */}
@@ -105,6 +113,29 @@ function App() {
           <Route path="profile" element={isClientAuthenticated ? <ProfilePage /> : <Navigate to="/login" />} />
         </Route>
       </Routes>
+      <Toaster 
+        position="top-right" 
+        toastOptions={{
+          style: {
+            background: 'rgba(10, 22, 40, 0.95)',
+            color: '#fff',
+            border: '1px solid rgba(255,255,255,0.1)',
+            backdropFilter: 'blur(12px)',
+          },
+          success: {
+            iconTheme: {
+              primary: '#22c55e',
+              secondary: '#fff',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#ef4444',
+              secondary: '#fff',
+            },
+          },
+        }} 
+      />
     </Router>
   );
 }

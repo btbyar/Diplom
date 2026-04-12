@@ -1,10 +1,12 @@
 import { Router, Request, Response } from 'express';
 import { Booking } from '../models/Booking.js';
 import { Service } from '../models/Service.js';
+import { authenticate, requireAdmin, AuthRequest } from '../middleware/authMiddleware.js';
 
 export const bookingRoutes = Router();
 
-bookingRoutes.get('/', async (_req: Request, res: Response) => {
+// Admin: get all bookings
+bookingRoutes.get('/', authenticate, requireAdmin, async (_req: Request, res: Response) => {
   try {
     const bookings = await Booking.find()
       .populate('userId', 'name email phone')
@@ -16,7 +18,8 @@ bookingRoutes.get('/', async (_req: Request, res: Response) => {
   }
 });
 
-bookingRoutes.get('/:id', async (req: Request, res: Response) => {
+// Admin: get booking by id
+bookingRoutes.get('/:id', authenticate, async (req: Request, res: Response) => {
   try {
     const booking = await Booking.findById(req.params.id)
       .populate('userId')
@@ -32,12 +35,14 @@ bookingRoutes.get('/:id', async (req: Request, res: Response) => {
   }
 });
 
-bookingRoutes.post('/', async (req: Request, res: Response) => {
+// Authenticated user: create booking — userId is taken from token, NOT from body
+bookingRoutes.post('/', authenticate, async (req: AuthRequest, res: Response) => {
   try {
-    const { userId, serviceId, date, time, brand, status, notes } = req.body;
+    const { serviceId, date, time, brand, notes } = req.body;
+    const userId = req.userId!;
 
     // Validate input
-    if (!userId || !serviceId || !date || !time) {
+    if (!serviceId || !date || !time) {
       res.status(400).json({ error: 'Шаардлагатай мэдээлэл дутуу байна' });
       return;
     }
@@ -45,6 +50,17 @@ bookingRoutes.post('/', async (req: Request, res: Response) => {
     const service = await Service.findById(serviceId);
     if (!service) {
       res.status(404).json({ error: 'Үйлчилгээ олдсонгүй' });
+      return;
+    }
+
+    // Check for time slot conflicts
+    const conflict = await Booking.findOne({
+      date,
+      time,
+      status: { $nin: ['cancelled'] },
+    });
+    if (conflict) {
+      res.status(409).json({ error: 'Тухайн цаг аль хэдийн захиалагдсан байна. Өөр цаг сонгоно уу.' });
       return;
     }
 
@@ -66,50 +82,50 @@ bookingRoutes.post('/', async (req: Request, res: Response) => {
     let paymentUrl = '';
     const projectId = process.env.BYL_PROJECT_ID;
     const apiKey = process.env.BYL_API_KEY;
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
 
     try {
-        const response = await fetch(`https://byl.mn/api/v1/projects/${projectId}/checkouts`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${apiKey}`,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            items: [
-              {
-                price_data: {
-                  currency: 'MNT',
-                  unit_amount: service.price,
-                  product_data: {
-                    name: service.name,
-                    description: `Цаг захиалга: ${date} ${time}`
-                  }
-                },
-                quantity: 1
-              }
-            ],
-            success_url: `http://localhost:5173/payment-success?booking_id=${newBooking._id}`,
-            cancel_url: `http://localhost:5173/`,
-            client_reference_id: newBooking._id.toString()
-          })
-        });
+      const response = await fetch(`https://byl.mn/api/v1/projects/${projectId}/checkouts`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          items: [
+            {
+              price_data: {
+                currency: 'MNT',
+                unit_amount: service.price,
+                product_data: {
+                  name: service.name,
+                  description: `Цаг захиалга: ${date} ${time}`
+                }
+              },
+              quantity: 1
+            }
+          ],
+          success_url: `${frontendUrl}/payment-success?booking_id=${newBooking._id}`,
+          cancel_url: `${frontendUrl}/`,
+          client_reference_id: newBooking._id.toString()
+        })
+      });
 
-        const responseText = await response.text();
-        console.log('Byl API status:', response.status);
-        console.log('Byl API response:', responseText);
+      const responseText = await response.text();
+      console.log('Byl API status:', response.status);
 
-        if (response.ok) {
-           const data = JSON.parse(responseText) as any;
-           paymentUrl = data.data?.url || data.url || data.checkoutUrl || data.checkout_url || '';
-           console.log('Byl payment URL:', paymentUrl);
-        } else {
-           console.error('Byl API error:', responseText);
-           paymentUrl = `http://localhost:5173/payment-success?booking_id=${newBooking._id}`;
-        }
+      if (response.ok) {
+        const data = JSON.parse(responseText) as any;
+        paymentUrl = data.data?.url || data.url || data.checkoutUrl || data.checkout_url || '';
+        console.log('Byl payment URL:', paymentUrl);
+      } else {
+        console.error('Byl API error:', responseText);
+        paymentUrl = `${frontendUrl}/payment-success?booking_id=${newBooking._id}`;
+      }
     } catch (apiError) {
       console.error('Byl API холболтын алдаа:', apiError);
-      paymentUrl = `http://localhost:5173/payment-success?booking_id=${newBooking._id}`;
+      paymentUrl = `${frontendUrl}/payment-success?booking_id=${newBooking._id}`;
     }
 
     res.status(201).json({ booking: newBooking, paymentUrl });
@@ -119,7 +135,8 @@ bookingRoutes.post('/', async (req: Request, res: Response) => {
   }
 });
 
-bookingRoutes.put('/:id', async (req: Request, res: Response) => {
+// Admin: update booking status
+bookingRoutes.put('/:id', authenticate, requireAdmin, async (req: Request, res: Response) => {
   try {
     const { status, notes, brand } = req.body;
     const booking = await Booking.findByIdAndUpdate(
@@ -141,7 +158,8 @@ bookingRoutes.put('/:id', async (req: Request, res: Response) => {
   }
 });
 
-bookingRoutes.delete('/:id', async (req: Request, res: Response) => {
+// Admin: delete booking
+bookingRoutes.delete('/:id', authenticate, requireAdmin, async (req: Request, res: Response) => {
   try {
     const booking = await Booking.findByIdAndDelete(req.params.id);
     if (booking) {
@@ -155,3 +173,15 @@ bookingRoutes.delete('/:id', async (req: Request, res: Response) => {
   }
 });
 
+// User: get own bookings (by token)
+bookingRoutes.get('/my/list', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const bookings = await Booking.find({ userId: req.userId })
+      .populate('serviceId', 'name price duration')
+      .sort({ createdAt: -1 });
+    res.json(bookings);
+  } catch (error: any) {
+    console.error('My bookings авах алдаа:', error);
+    res.status(500).json({ error: 'Сервер алдаа' });
+  }
+});

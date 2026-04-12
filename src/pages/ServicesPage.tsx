@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { servicesAPI } from '../services/api';
 import type { Service } from '../types';
 import { FiClock, FiCheckCircle, FiCalendar, FiSettings } from 'react-icons/fi';
+import { Skeleton } from '../components/ui/Skeleton';
 import './ServicesPage.css';
 
 export const ServicesPage: React.FC = () => {
@@ -27,15 +28,21 @@ export const ServicesPage: React.FC = () => {
   return (
     <div className="client-services-page">
       <div className="page-header">
-        <div className="container">
+        <div className="container animate-slide-up">
           <h1>Авто засварын үйлчилгээ</h1>
           <p>Бид таны автомашинд мэргэжлийн түвшинд, баталгаат засвар үйлчилгээ үзүүлж байна.</p>
         </div>
       </div>
 
-      <div className="container services-container">
+      <div className="container services-container animate-slide-up">
         {loading ? (
-          <div className="loading-state">Үйлчилгээнүүдийг уншиж байна...</div>
+          <div className="services-list-view">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="service-row glass-panel" style={{ padding: '0', background: 'transparent', border: 'none' }}>
+                <Skeleton type="card" height="120px" width="100%" />
+              </div>
+            ))}
+          </div>
         ) : services.length === 0 ? (
           <div className="empty-state">
             <h3>Одоогоор үйлчилгээ бүртгэгдээгүй байна.</h3>
@@ -43,8 +50,8 @@ export const ServicesPage: React.FC = () => {
         ) : (
           <div className="services-list-view">
             {services.map(service => (
-              <div key={service._id || service.id} className="service-row">
-                
+              <div key={service._id || service.id} className="service-row glass-panel">
+
                 <div className="service-row-left">
                   <div className="service-icon-box">
                     <FiSettings />
@@ -68,7 +75,7 @@ export const ServicesPage: React.FC = () => {
                     Цаг захиалах <FiCalendar />
                   </Link>
                 </div>
-                
+
               </div>
             ))}
           </div>

@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { authenticate, requireAdmin } from '../middleware/authMiddleware.js';
 
 export const uploadRoutes = Router();
 
@@ -29,7 +30,7 @@ const fileFilter = (_req: Request, file: Express.Multer.File, cb: multer.FileFil
 
 const upload = multer({ storage, fileFilter, limits: { fileSize: 5 * 1024 * 1024 } });
 
-uploadRoutes.post('/', upload.single('image'), (req: Request, res: Response) => {
+uploadRoutes.post('/', authenticate, requireAdmin, upload.single('image'), (req: Request, res: Response) => {
     if (!req.file) {
         res.status(400).json({ error: 'Зураг оруулаагүй байна' });
         return;

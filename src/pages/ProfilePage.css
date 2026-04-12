@@ -4,14 +4,15 @@
   padding-bottom: 120px;
   position: relative;
   z-index: 1;
+  background: #0a1628;
 }
 
 .profile-page::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: none;
-  z-index: -1;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
   pointer-events: none;
 }
 
@@ -22,14 +23,13 @@
 }
 
 .profile-header h1 {
-  font-size: 2.5rem;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-size: clamp(2rem, 4vw, 2.5rem);
   font-weight: 800;
   margin-bottom: 10px;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #ffffff;
   display: inline-block;
+  text-transform: uppercase;
 }
 
 .profile-header p {
@@ -138,6 +138,46 @@
   margin-bottom: 24px;
 }
 
+/* Tabs */
+.profile-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  padding: 8px;
+  border-radius: var(--radius-xl);
+  border: var(--glass-border);
+}
+
+.tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 12px;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all var(--transition-fast);
+}
+
+.tab-btn:hover {
+  color: var(--primary-color);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-btn.active {
+  color: #fff;
+  background: var(--gradient-primary);
+  box-shadow: var(--shadow-sm);
+}
+
 .section-header h2 {
   font-size: 1.8rem;
   font-weight: 700;
@@ -167,7 +207,7 @@
 .vehicle-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
-  border-color: rgba(0, 240, 255, 0.3);
+  border-color: rgba(224, 93, 16, 0.3);
 }
 
 .vehicle-plate {
@@ -203,7 +243,7 @@
 
 .booking-item:hover {
   background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(138, 43, 226, 0.3);
+  border-color: rgba(232, 160, 32, 0.3);
 }
 
 .booking-info {
@@ -232,10 +272,29 @@
   letter-spacing: 1px;
 }
 
-.status-pending { background: rgba(234, 179, 8, 0.15); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.3); }
-.status-confirmed { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
-.status-completed { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
-.status-cancelled { background: rgba(248, 113, 113, 0.15); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.3); }
+.status-pending {
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+.status-confirmed {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.status-completed {
+  background: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.status-cancelled {
+  background: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
 
 /* Add Vehicle Form */
 .add-vehicle-form {
@@ -264,7 +323,7 @@
 .add-vehicle-form input:focus {
   outline: none;
   border-color: var(--accent-color);
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+  box-shadow: 0 0 15px rgba(224, 93, 16, 0.15);
 }
 
 .form-actions {
@@ -305,15 +364,27 @@
 
 .btn-add:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 240, 255, 0.3);
+  box-shadow: 0 5px 15px rgba(224, 93, 16, 0.3);
 }
 
 @media (max-width: 1024px) {
-  .profile-container { grid-template-columns: 1fr; }
+  .profile-container {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 768px) {
-  .add-vehicle-form { grid-template-columns: 1fr; }
-  .booking-item { flex-direction: column; align-items: flex-start; gap: 16px; }
-  .booking-status { align-self: flex-start; }
+  .add-vehicle-form {
+    grid-template-columns: 1fr;
+  }
+
+  .booking-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .booking-status {
+    align-self: flex-start;
+  }
 }

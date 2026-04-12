@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAdminAuthStore } from '../../store';
-import { FiHome, FiCalendar, FiTool, FiPackage, FiUsers, FiTrendingUp, FiLogOut, FiList, FiCreditCard } from 'react-icons/fi';
+import { FiHome, FiCalendar, FiTool, FiPackage, FiUsers, FiTrendingUp, FiLogOut, FiList, FiCreditCard, FiShoppingBag } from 'react-icons/fi';
 import '../styles/Sidebar.css';
 
 export const Sidebar = () => {
@@ -10,7 +10,8 @@ export const Sidebar = () => {
 
   const menuItems = [
     { icon: FiHome, label: 'Нүүр', path: '/admin' },
-    { icon: FiCalendar, label: 'Захиалга', path: '/admin/bookings' },
+    { icon: FiCalendar, label: 'Цаг захиалга', path: '/admin/bookings' },
+    { icon: FiShoppingBag, label: 'Сэлбэг захиалга', path: '/admin/orders' },
     { icon: FiCreditCard, label: 'Төлбөр', path: '/admin/payments' },
     { icon: FiTool, label: 'Үйлчилгээ', path: '/admin/services' },
     { icon: FiUsers, label: 'Хэрэглэгч', path: '/admin/users' },

@@ -1,10 +1,23 @@
 import { Router, Request, Response } from 'express';
 import { Vehicle } from '../models/Vehicle.js';
+import { authenticate, requireAdmin, AuthRequest } from '../middleware/authMiddleware.js';
 
 export const vehicleRoutes = Router();
 
-// Get all vehicles
-vehicleRoutes.get('/', async (_req: Request, res: Response) => {
+// Get current user's vehicles (authenticated)
+vehicleRoutes.get('/my', authenticate, async (req: AuthRequest, res: Response) => {
+    try {
+        const userId = req.userId!;
+        const vehicles = await Vehicle.find({ ownerId: userId }).sort({ createdAt: -1 });
+        res.json(vehicles);
+    } catch (error: any) {
+        console.error('My vehicles fetch error:', error);
+        res.status(500).json({ error: 'Сервер алдаа' });
+    }
+});
+
+// Admin: get all vehicles
+vehicleRoutes.get('/', authenticate, requireAdmin, async (_req: Request, res: Response) => {
     try {
         const vehicles = await Vehicle.find().populate('ownerId', 'name email phone').sort({ createdAt: -1 });
         res.json(vehicles);
@@ -29,10 +42,11 @@ vehicleRoutes.get('/:id', async (req: Request, res: Response) => {
     }
 });
 
-// Create new vehicle
-vehicleRoutes.post('/', async (req: Request, res: Response) => {
+// Authenticated user: create vehicle — ownerId from token
+vehicleRoutes.post('/', authenticate, async (req: AuthRequest, res: Response) => {
     try {
-        const { ownerId, plateNumber, make, modelName, year, color, vin, notes } = req.body;
+        const { plateNumber, make, modelName, year, color, vin, notes } = req.body;
+        const ownerId = req.userId;
 
         if (!plateNumber || !make || !modelName) {
             res.status(400).json({ error: 'Улсын дугаар, марк, загвар шаардлагатай' });
@@ -68,8 +82,8 @@ vehicleRoutes.post('/', async (req: Request, res: Response) => {
     }
 });
 
-// Update vehicle
-vehicleRoutes.put('/:id', async (req: Request, res: Response) => {
+// Admin: update vehicle
+vehicleRoutes.put('/:id', authenticate, requireAdmin, async (req: Request, res: Response) => {
     try {
         const vehicleId = req.params.id;
         if (!vehicleId) {
@@ -114,8 +128,8 @@ vehicleRoutes.put('/:id', async (req: Request, res: Response) => {
     }
 });
 
-// Delete vehicle
-vehicleRoutes.delete('/:id', async (req: Request, res: Response) => {
+// Admin: delete vehicle
+vehicleRoutes.delete('/:id', authenticate, requireAdmin, async (req: Request, res: Response) => {
     try {
         const vehicleId = req.params.id;
         if (!vehicleId) {

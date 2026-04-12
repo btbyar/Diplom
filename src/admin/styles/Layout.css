@@ -18,14 +18,16 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #1a202e;
+  background: #0a1628;
+  background-image: linear-gradient(135deg, #0a1628 0%, #0d1f3c 50%, #111a2e 100%);
+  background-attachment: fixed;
   color: #e2e8f0;
 }
 
 .admin-layout {
   display: flex;
   min-height: 100vh;
-  background: #1a202e;
+  background: transparent;
 }
 
 .admin-layout-content {
@@ -84,7 +86,7 @@ body {
 }
 
 .admin-theme select option {
-  background: #1a202e !important;
+  background: #0a1628 !important;
   color: #ffffff !important;
 }
 

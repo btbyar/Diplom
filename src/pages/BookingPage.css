@@ -7,22 +7,27 @@
   justify-content: center;
   position: relative;
   z-index: 1;
+  background: #0a1628;
 }
 
 /* Ambient glow */
 .booking-page::before {
   content: '';
   position: absolute;
-  width: 800px;
-  height: 800px;
-  background: none;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
   pointer-events: none;
   z-index: -1;
-  filter: blur(50px);
+}
+
+.booking-page::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 80% at 70% 50%, rgba(224, 93, 16, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
 }
 
 .booking-card {
@@ -56,10 +61,13 @@
 }
 
 .booking-header h2 {
+  font-family: 'Outfit', 'Inter', sans-serif;
   font-size: 2rem;
   font-weight: 800;
   margin-bottom: 12px;
+  color: #ffffff;
   letter-spacing: -0.5px;
+  text-transform: uppercase;
 }
 
 .booking-header p {
@@ -105,7 +113,7 @@
   border-color: var(--accent-color);
   outline: none;
   background-color: rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+  box-shadow: 0 0 15px rgba(224, 93, 16, 0.15);
 }
 
 .form-group input::placeholder,
@@ -150,7 +158,7 @@ select option {
 
 .btn-submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(138, 43, 226, 0.4);
+  box-shadow: 0 10px 25px rgba(232, 160, 32, 0.4);
 }
 
 .btn-submit:disabled {
@@ -230,7 +238,7 @@ select option {
 
 .auth-actions .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(0, 240, 255, 0.3);
+  box-shadow: 0 5px 20px rgba(224, 93, 16, 0.3);
 }
 
 .auth-actions .btn-secondary {

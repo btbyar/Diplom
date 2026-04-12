@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate, Link, useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { servicesAPI, bookingsAPI } from '../services/api';
 import { useAuthStore } from '../store';
 import type { Service } from '../types';
 import './BookingPage.css';
 
 export const BookingPage: React.FC = () => {
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -43,7 +44,7 @@ export const BookingPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isAuthenticated) return;
-    
+
     try {
       setSubmitting(true);
       const response = await bookingsAPI.create({
@@ -52,19 +53,19 @@ export const BookingPage: React.FC = () => {
         time: formData.time,
         notes: formData.notes,
         status: 'payment_pending',
-        userId: user?.id || user?._id || '',
+        userId: '', // backend will use JWT token
       } as any);
-      
+
       const paymentUrl = response.data.paymentUrl;
       if (paymentUrl) {
-         window.location.href = paymentUrl;
+        window.location.href = paymentUrl;
       } else {
-         alert('Захиалга амжилттай бүртгэгдлээ!');
-         navigate('/');
+        toast.success('Захиалга амжилттай бүртгэгдлээ!');
+        navigate('/');
       }
     } catch (error: any) {
       console.error('Error submitting booking:', error);
-      alert('Алдаа гарлаа: ' + (error.response?.data?.message || 'Одоохондоо боломжгүй байна'));
+      toast.error('Алдаа гарлаа: ' + (error.response?.data?.message || 'Одоохондоо боломжгүй байна'));
     } finally {
       setSubmitting(false);
     }
@@ -100,10 +101,10 @@ export const BookingPage: React.FC = () => {
             <form className="booking-form" onSubmit={handleSubmit}>
               <div className="form-group">
                 <label>Үйлчилгээ сонгох</label>
-                <select 
+                <select
                   required
                   value={formData.serviceId}
-                  onChange={(e) => setFormData({...formData, serviceId: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, serviceId: e.target.value })}
                 >
                   <option value="">-- Үйлчилгээ сонгоно уу --</option>
                   {services.map(s => (
@@ -117,21 +118,21 @@ export const BookingPage: React.FC = () => {
               <div className="form-row">
                 <div className="form-group">
                   <label>Огноо</label>
-                  <input 
-                    type="date" 
+                  <input
+                    type="date"
                     required
                     min={new Date().toISOString().split('T')[0]}
                     value={formData.date}
-                    onChange={(e) => setFormData({...formData, date: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                   />
                 </div>
-                
+
                 <div className="form-group">
                   <label>Цаг</label>
-                  <select 
+                  <select
                     required
                     value={formData.time}
-                    onChange={(e) => setFormData({...formData, time: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, time: e.target.value })}
                   >
                     {timeSlots.map(time => (
                       <option key={time} value={time}>{time}</option>
@@ -142,17 +143,17 @@ export const BookingPage: React.FC = () => {
 
               <div className="form-group">
                 <label>Нэмэлт мэдээлэл</label>
-                <textarea 
+                <textarea
                   placeholder="Машины марк, улсын дугаар эсвэл нэмэлт тайлбар (заавал биш)"
                   value={formData.notes}
-                  onChange={(e) => setFormData({...formData, notes: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   rows={4}
                 ></textarea>
               </div>
 
-              <button 
-                type="submit" 
-                className="btn-submit" 
+              <button
+                type="submit"
+                className="btn-submit"
                 disabled={submitting || !formData.serviceId || !formData.date}
               >
                 {submitting ? 'Захиалж байна...' : 'Баталгаажуулах'}

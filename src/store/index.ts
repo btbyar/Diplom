@@ -61,7 +61,7 @@ export const useAuthStore = create<AuthStore>()(
       isAuthenticated: false,
       login: (user, token) => set({ user, token, isAuthenticated: true }),
       logout: () => {
-        localStorage.removeItem('auth_token');
+        localStorage.removeItem('auth-storage');
         set({ user: null, token: null, isAuthenticated: false });
       },
     }),
@@ -80,7 +80,7 @@ export const useAdminAuthStore = create<AuthStore>()(
       isAuthenticated: false,
       login: (user, token) => set({ user, token, isAuthenticated: true }),
       logout: () => {
-        localStorage.removeItem('admin_auth_token');
+        localStorage.removeItem('admin-auth-storage');
         set({ user: null, token: null, isAuthenticated: false });
       },
     }),

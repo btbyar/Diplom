@@ -1,7 +1,7 @@
 .admin-dashboard {
   display: flex;
   min-height: 100vh;
-  background: #1a202e;
+  background: transparent;
 }
 
 .admin-main-content {

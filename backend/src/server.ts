@@ -12,6 +12,7 @@ import { partRoutes } from './routes/parts.js';
 import { uploadRoutes } from './routes/upload.js';
 import { vehicleRoutes } from './routes/vehicles.js';
 import { webhookRoutes } from './routes/webhook.js';
+import { orderRoutes } from './routes/orders.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,8 +23,26 @@ const app: Express = express();
 const port = process.env.PORT || 3000;
 const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/car-service';
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  ...(process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.split(',').map((url) => url.trim())
+    : []),
+];
+
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS policy: origin not allowed'));
+    }
+  },
+  credentials: true,
+}));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
@@ -46,9 +65,10 @@ app.use('/api/parts', partRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/vehicles', vehicleRoutes);
 app.use('/api/webhook', webhookRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', message: 'Server ажиллаж байна' });
 });
 

@@ -1,28 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { FiCheckCircle } from 'react-icons/fi';
 
 export const PaymentSuccess: React.FC = () => {
   const [searchParams] = useSearchParams();
   const bookingId = searchParams.get('booking_id');
-  const [countdown, setCountdown] = useState(5);
+  const orderId = searchParams.get('order_id');
 
   useEffect(() => {
     // Optionally trigger a backend check or webhook mock if needed for test mode
-    if (bookingId && process.env.NODE_ENV === 'development') {
+    if (bookingId && import.meta.env.MODE === 'development') {
        fetch(`http://localhost:3000/api/webhook/byl?booking_id=${bookingId}`, {
            method: 'POST',
            headers: { 'Content-Type': 'application/json' },
            body: JSON.stringify({ status: 'paid' })
        }).catch(console.error);
     }
+    if (orderId && import.meta.env.MODE === 'development') {
+       fetch(`http://localhost:3000/api/webhook/byl?order_id=${orderId}`, {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify({ status: 'paid' })
+       }).catch(console.error);
+    }
 
-    const timer = setInterval(() => {
-       setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [bookingId]);
+    return () => {}; // No timer needed
+  }, [bookingId, orderId]);
 
   return (
     <div className="booking-page" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
@@ -34,7 +37,12 @@ export const PaymentSuccess: React.FC = () => {
         </p>
         {bookingId && (
            <p style={{ fontSize: '14px', color: '#666', marginBottom: '20px' }}>
-             Захиалгын дугаар: <strong>{bookingId}</strong>
+             Цаг захиалгын дугаар: <strong>{bookingId}</strong>
+           </p>
+        )}
+        {orderId && (
+           <p style={{ fontSize: '14px', color: '#666', marginBottom: '20px' }}>
+             Сэлбэг захиалгын дугаар: <strong>{orderId}</strong>
            </p>
         )}
         <Link to="/" className="btn-primary" style={{ display: 'inline-block' }}>
