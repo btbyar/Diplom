@@ -38,7 +38,7 @@
 .hero-inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 48px;
+  gap: 32px;
   align-items: center;
   padding-top: 72px;
   padding-bottom: 40px;
