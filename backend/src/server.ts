@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import path from 'path';
-import { fileURLToPath } from 'url';
+
 import { authRoutes } from './routes/auth.js';
 import { bookingRoutes } from './routes/bookings.js';
 import { serviceRoutes } from './routes/services.js';
@@ -14,8 +14,7 @@ import { vehicleRoutes } from './routes/vehicles.js';
 import { webhookRoutes } from './routes/webhook.js';
 import { orderRoutes } from './routes/orders.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+
 
 dotenv.config();
 
