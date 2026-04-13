@@ -33,6 +33,7 @@
 .card-action {
   display: flex;
   gap: 8px;
+  margin-left: auto;
 }
 
 .card-body {
