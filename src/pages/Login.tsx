@@ -88,7 +88,7 @@ export const Login: React.FC = () => {
           </div>
 
           <div className="auth-options-premium" style={{ justifyContent: 'flex-end' }}>
-            <a href="#" className="forgot-password-premium">Нууц үг сэргээх</a>
+            <Link to="/forgot-password" className="forgot-password-premium">Нууц үг сэргээх</Link>
           </div>
 
           <button type="submit" disabled={loading} className="btn-auth-premium">

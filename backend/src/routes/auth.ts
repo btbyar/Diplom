@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import { User } from '../models/User.js';
 
 export const authRoutes = Router();
@@ -89,3 +90,73 @@ authRoutes.get('/me', async (req: Request, res: Response) => {
   }
 });
 
+authRoutes.post('/forgot-password', async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      res.status(400).json({ error: 'Имэйл хаяг шаардлагатай' });
+      return;
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      // Security best practice: don't reveal if user exists or not
+      res.json({ message: 'Сэргээх линк илгээгдлээ (хэрэв бүртгэлтэй бол)' });
+      return;
+    }
+
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = new Date(Date.now() + 3600000); // 1 hour
+
+    await user.save();
+
+    const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
+    
+    // Simulate email send
+    console.log('\n=============================================');
+    console.log('ЭНЭ НЬ МЕЙЛЭЭР ЯВСАН ЛИНК ГЭЖ БОДНО (TESTING):');
+    console.log(`Нууц үг сэргээх линк: ${resetUrl}`);
+    console.log('=============================================\n');
+
+    res.json({ message: 'Сэргээх линк илгээгдлээ (хэрэв бүртгэлтэй бол)' });
+
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ error: 'Серверийн алдаа гарлаа' });
+  }
+});
+
+authRoutes.post('/reset-password', async (req: Request, res: Response) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    if (!token || !newPassword) {
+      res.status(400).json({ error: 'Мэдээлэл дутуу байна' });
+      return;
+    }
+
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: new Date() }
+    });
+
+    if (!user) {
+      res.status(400).json({ error: 'Таны холбоос буруу эсвэл хугацаа нь дууссан байна' });
+      return;
+    }
+
+    const salt = await bcryptjs.genSalt(10);
+    user.password = await bcryptjs.hash(newPassword, salt);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+
+    await user.save();
+
+    res.json({ message: 'Нууц үг амжилттай шинэчлэгдлээ' });
+
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ error: 'Серверийн алдаа гарлаа' });
+  }
+});

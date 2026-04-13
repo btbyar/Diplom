@@ -7,6 +7,8 @@ interface IUser {
   name: string;
   role: 'admin' | 'user';
   createdAt: Date;
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
 }
 
 const userSchema = new Schema<IUser>(
@@ -16,6 +18,8 @@ const userSchema = new Schema<IUser>(
     phone: { type: String, required: true },
     name: { type: String, required: true },
     role: { type: String, enum: ['admin', 'user'], default: 'user' },
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date },
   },
   { timestamps: true }
 );

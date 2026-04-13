@@ -63,7 +63,7 @@ export const HomePage: React.FC = () => {
 
   const stats = [
     { icon: <FiClock />, value: '10+', label: 'Жилийн туршлага' },
-    { icon: <FiTool />, value: '5000+', label: 'Хийсэн засвар' },
+    { icon: <FiTool />, value: '5000+', label: 'Засвар үйлчилгээ' },
     { icon: <FiShield />, value: '100%', label: 'Баталгаат ажил' },
   ];
 
@@ -193,7 +193,7 @@ export const HomePage: React.FC = () => {
         <div className="container animate-slide-up">
           <div className="section-header">
             <div>
-              <h2 className="section-title">СЭЛБЭГҮҮД</h2>
+              <h2 className="section-title">СЭЛБЭГ</h2>
             </div>
             <Link to="/parts" className="btn-link">
               Бүгдийг үзэх <FiArrowRight />
@@ -246,7 +246,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      <PartModal 
+      <PartModal
         part={selectedPart}
         isOpen={!!selectedPart}
         onClose={() => setSelectedPart(null)}

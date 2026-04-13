@@ -23,11 +23,14 @@ import { ServicesPage as ClientServicesPage } from './pages/ServicesPage';
 import { BookingPage } from './pages/BookingPage';
 import { Login as ClientLogin } from './pages/Login';
 import { Register as ClientRegister } from './pages/Register';
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
+import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { PaymentSuccess } from './pages/PaymentSuccess';
 import { PaymentCancelled } from './pages/PaymentCancelled';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { AboutPage } from './pages/AboutPage';
+import { ContactPage } from './pages/ContactPage';
 
 import './App.css';
 
@@ -104,6 +107,7 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
           <Route path="about" element={<AboutPage />} />
+          <Route path="contact" element={<ContactPage />} />
           <Route path="parts" element={<ClientPartsPage />} />
           <Route path="services" element={<ClientServicesPage />} />
           <Route path="book" element={<BookingPage />} />
@@ -114,6 +118,8 @@ function App() {
           {/* Client Auth Routes */}
           <Route path="login" element={isClientAuthenticated ? <Navigate to="/" /> : <ClientLogin />} />
           <Route path="register" element={isClientAuthenticated ? <Navigate to="/" /> : <ClientRegister />} />
+          <Route path="forgot-password" element={isClientAuthenticated ? <Navigate to="/" /> : <ForgotPasswordPage />} />
+          <Route path="reset-password/:token" element={isClientAuthenticated ? <Navigate to="/" /> : <ResetPasswordPage />} />
           <Route path="profile" element={isClientAuthenticated ? <ProfilePage /> : <Navigate to="/login" />} />
         </Route>
       </Routes>
