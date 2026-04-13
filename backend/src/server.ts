@@ -44,7 +44,9 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+// process.cwd() → always points to backend/ regardless of dev/prod
+const uploadsPath = path.resolve(process.cwd(), 'uploads');
+app.use('/uploads', express.static(uploadsPath));
 
 // MongoDB холболт
 mongoose
