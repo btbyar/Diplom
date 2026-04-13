@@ -26,6 +26,7 @@ export const Footer: React.FC = () => {
             <h3 className="footer-heading">Холбоос</h3>
             <ul className="footer-links">
               <li><Link to="/">Нүүр</Link></li>
+              <li><Link to="/about">Бидний тухай</Link></li>
               <li><Link to="/parts">Сэлбэг</Link></li>
               <li><Link to="/services">Үйлчилгээ</Link></li>
             </ul>

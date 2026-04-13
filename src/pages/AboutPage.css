@@ -1,0 +1,228 @@
+.about-page {
+  position: relative;
+  background: #0a1628;
+  color: #fff;
+  min-height: 100vh;
+}
+
+/* Hero */
+.about-hero {
+  position: relative;
+  padding: 120px 0 100px;
+  background: url('https://images.unsplash.com/photo-1486495333554-3e91d5ce5f90?w=1600&q=80&auto=format&fit=crop') center/cover no-repeat;
+  text-align: center;
+}
+
+.about-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(10, 22, 40, 0.85), #0a1628);
+}
+
+.about-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(224, 93, 16, 0.15);
+  border: 1px solid rgba(224, 93, 16, 0.35);
+  color: #f08030;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  width: fit-content;
+}
+
+.about-title {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 900;
+  margin-bottom: 20px;
+  letter-spacing: -0.5px;
+}
+
+.about-title-highlight {
+  color: #e8a020;
+  text-shadow: 0 0 40px rgba(232, 160, 32, 0.3);
+}
+
+.about-subtitle {
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.7;
+}
+
+/* Mission & Vision */
+.about-mission {
+  padding: 60px 0 80px;
+  background: #0a1628;
+}
+
+.mission-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.mission-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 40px 30px;
+  text-align: center;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.mission-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(224, 93, 16, 0.4);
+}
+
+.mission-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  background: rgba(224, 93, 16, 0.15);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f08030;
+}
+
+.mission-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+.mission-card p {
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* Features */
+.about-features {
+  padding: 80px 0;
+  background: #0d1a2d;
+}
+
+.features-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.features-text h2 {
+  font-size: 2rem;
+  margin-bottom: 40px;
+  color: #fff;
+}
+
+.features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.feature-item {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.feature-check {
+  color: #22d26e;
+  font-size: 1.5rem;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.feature-item h4 {
+  font-size: 1.1rem;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.feature-item p {
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.features-image {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.features-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.features-image-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(10, 22, 40, 0.4), transparent);
+}
+
+/* Contact Banner */
+.about-contact-banner {
+  padding: 80px 0;
+  background: linear-gradient(135deg, #e05d10 0%, #f07820 100%);
+}
+
+.banner-content {
+  text-align: center;
+}
+
+.about-contact-banner h2 {
+  font-size: 2.2rem;
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+.about-contact-banner p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 30px;
+}
+
+.contact-btn {
+  display: inline-block;
+  background: #fff;
+  color: #e05d10;
+  padding: 15px 40px;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.contact-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 900px) {
+  .mission-grid {
+    grid-template-columns: 1fr;
+  }
+  .features-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}

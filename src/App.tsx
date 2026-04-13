@@ -27,6 +27,7 @@ import { ProfilePage } from './pages/ProfilePage';
 import { PaymentSuccess } from './pages/PaymentSuccess';
 import { PaymentCancelled } from './pages/PaymentCancelled';
 import { CheckoutPage } from './pages/CheckoutPage';
+import { AboutPage } from './pages/AboutPage';
 
 import './App.css';
 
@@ -102,6 +103,7 @@ function App() {
         {/* Public Client Routes */}
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
+          <Route path="about" element={<AboutPage />} />
           <Route path="parts" element={<ClientPartsPage />} />
           <Route path="services" element={<ClientServicesPage />} />
           <Route path="book" element={<BookingPage />} />
