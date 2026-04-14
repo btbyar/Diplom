@@ -6,6 +6,7 @@ import { Sidebar } from '../components/Sidebar';
 import { TopBar } from '../components/TopBar';
 import { Card } from '../components/Card';
 import { StatCard } from '../components/StatCard';
+import { Button } from '../components/Button';
 import { FiTrendingUp, FiCalendar, FiDollarSign, FiBarChart2 } from 'react-icons/fi';
 import type { Booking, Service, User } from '../../types';
 import '../styles/Layout.css';
