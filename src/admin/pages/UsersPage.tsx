@@ -17,6 +17,7 @@ export const UsersPage = () => {
   const { user: currentUser } = useAdminAuthStore();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [formData, setFormData] = useState<{
@@ -41,10 +42,13 @@ export const UsersPage = () => {
   const loadUsers = async () => {
     try {
       setLoading(true);
+      setError('');
       const res = await usersAPI.getAll();
       setUsers(res.data || []);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error loading users:', err);
+      const message = err.response?.data?.error || err.message || 'Хэрэглэгчийн мэдээлэл ачаалахад алдаа гарлаа';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -113,6 +117,16 @@ export const UsersPage = () => {
       <div className="admin-layout-content">
         <TopBar title="Хэрэглэгчийн менежмент" />
         <main className="admin-main">
+          {error && (
+            <Card className="mb-6">
+              <div className="flex-between">
+                <div className="text-danger">{error}</div>
+                <Button variant="secondary" size="sm" onClick={loadUsers}>
+                  Дахин оролдох
+                </Button>
+              </div>
+            </Card>
+          )}
           <Card
             title="Хэрэглэгчид"
             headerAction={

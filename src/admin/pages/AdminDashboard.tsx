@@ -42,17 +42,18 @@ export const AdminDashboard = () => {
       setError('');
 
       const [bookingsRes, servicesRes, usersRes] = await Promise.all([
-        bookingsAPI.getAll().catch(() => ({ data: [] })),
-        servicesAPI.getAll().catch(() => ({ data: [] })),
-        usersAPI.getAll().catch(() => ({ data: [] })),
+        bookingsAPI.getAll(),
+        servicesAPI.getAll(),
+        usersAPI.getAll(),
       ]);
 
       setBookings(bookingsRes.data || []);
       setServices(servicesRes.data || []);
       setUsers(usersRes.data || []);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error loading dashboard:', err);
-      setError('Failed to load dashboard data');
+      const message = err.response?.data?.error || err.message || 'Мэдээлэл ачаалахад алдаа гарлаа';
+      setError(message);
     } finally {
       setLoading(false);
     }

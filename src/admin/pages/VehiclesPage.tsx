@@ -20,6 +20,7 @@ export const VehiclesPage = () => {
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
     const [formData, setFormData] = useState({
@@ -43,14 +44,17 @@ export const VehiclesPage = () => {
     const loadData = async () => {
         try {
             setLoading(true);
+            setError('');
             const [vRes, uRes] = await Promise.all([
                 vehiclesAPI.getAll(),
                 usersAPI.getAll()
             ]);
             setVehicles(vRes.data || []);
             setUsers(uRes.data || []);
-        } catch (err) {
+        } catch (err: any) {
             console.error('Error loading data:', err);
+            const message = err.response?.data?.error || err.message || 'Машины мэдээлэл ачаалахад алдаа гарлаа';
+            setError(message);
         } finally {
             setLoading(false);
         }
@@ -161,6 +165,16 @@ export const VehiclesPage = () => {
             <div className="admin-layout-content">
                 <TopBar title="Машины бүртгэл" />
                 <main className="admin-main">
+                    {error && (
+                        <Card className="mb-6">
+                            <div className="flex-between">
+                                <div className="text-danger">{error}</div>
+                                <Button variant="secondary" size="sm" onClick={loadData}>
+                                    Дахин оролдох
+                                </Button>
+                            </div>
+                        </Card>
+                    )}
                     <Card
                         title="Бүртгэлтэй Машинууд"
                         headerAction={

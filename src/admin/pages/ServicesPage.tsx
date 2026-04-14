@@ -17,6 +17,7 @@ export const ServicesPage = () => {
   const { user } = useAdminAuthStore();
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingService, setEditingService] = useState<Service | null>(null);
   const [formData, setFormData] = useState({
@@ -34,10 +35,13 @@ export const ServicesPage = () => {
   const loadServices = async () => {
     try {
       setLoading(true);
+      setError('');
       const res = await servicesAPI.getAll();
       setServices(res.data || []);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error loading services:', err);
+      const message = err.response?.data?.error || err.message || 'Үйлчилгээний мэдээлэл ачаалахад алдаа гарлаа';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -105,6 +109,16 @@ export const ServicesPage = () => {
       <div className="admin-layout-content">
         <TopBar title="Үйлчилгээ удирдах" />
         <main className="admin-main">
+          {error && (
+            <Card className="mb-6">
+              <div className="flex-between">
+                <div className="text-danger">{error}</div>
+                <Button variant="secondary" size="sm" onClick={loadServices}>
+                  Дахин оролдох
+                </Button>
+              </div>
+            </Card>
+          )}
           <Card
             title="Үйлчилгээнүүд"
             headerAction={

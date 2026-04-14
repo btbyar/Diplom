@@ -18,6 +18,7 @@ export const OrdersPage = () => {
   const { user } = useAdminAuthStore();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingOrder, setEditingOrder] = useState<Order | null>(null);
   const [statusMenu, setStatusMenu] = useState({
@@ -33,10 +34,13 @@ export const OrdersPage = () => {
   const loadData = async () => {
     try {
       setLoading(true);
+      setError('');
       const res = await ordersAPI.getAll();
       setOrders(res.data || []);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error loading orders:', err);
+      const message = err.response?.data?.error || err.message || 'Захиалгын мэдээлэл ачаалахад алдаа гарлаа';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -115,6 +119,16 @@ export const OrdersPage = () => {
       <div className="admin-layout-content">
         <TopBar title="Сэлбэгийн захиалгууд" />
         <main className="admin-main">
+          {error && (
+            <Card className="mb-6">
+              <div className="flex-between">
+                <div className="text-danger">{error}</div>
+                <Button variant="secondary" size="sm" onClick={loadData}>
+                  Дахин оролдох
+                </Button>
+              </div>
+            </Card>
+          )}
           <Card title="Сүүлийн захиалгууд">
             <Table
               columns={columns}

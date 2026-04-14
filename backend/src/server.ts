@@ -43,6 +43,13 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json());
+
+// Request logger
+app.use((req, _res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
+
 // process.cwd() → always points to backend/ regardless of dev/prod
 const uploadsPath = path.resolve(process.cwd(), 'uploads');
 app.use('/uploads', express.static(uploadsPath));

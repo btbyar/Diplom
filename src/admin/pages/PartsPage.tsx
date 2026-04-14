@@ -21,6 +21,7 @@ export const PartsPage = () => {
 
   const [parts, setParts] = useState<Part[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingPart, setEditingPart] = useState<Part | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -44,10 +45,13 @@ export const PartsPage = () => {
   const loadParts = async () => {
     try {
       setLoading(true);
+      setError('');
       const res = await partsAPI.getAll();
       setParts(res.data || []);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error loading parts:', err);
+      const message = err.response?.data?.error || err.message || 'Сэлбэгийн мэдээлэл ачаалахад алдаа гарлаа';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -184,6 +188,16 @@ export const PartsPage = () => {
       <div className="admin-layout-content">
         <TopBar title="Сэлбэгийн агуулах" />
         <main className="admin-main">
+          {error && (
+            <Card className="mb-6">
+              <div className="flex-between">
+                <div className="text-danger">{error}</div>
+                <Button variant="secondary" size="sm" onClick={loadParts}>
+                  Дахин оролдох
+                </Button>
+              </div>
+            </Card>
+          )}
           <Card
             title="Сэлбэгүүд"
             headerAction={

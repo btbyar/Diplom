@@ -24,6 +24,7 @@ export const PaymentsPage = () => {
   const { user } = useAdminAuthStore();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [filter, setFilter] = useState<string>('all');
 
   useEffect(() => {
@@ -34,10 +35,13 @@ export const PaymentsPage = () => {
   const loadData = async () => {
     try {
       setLoading(true);
+      setError('');
       const res = await bookingsAPI.getAll();
       setBookings(res.data || []);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error loading bookings:', err);
+      const message = err.response?.data?.error || err.message || 'Төлбөрийн мэдээлэл ачаалахад алдаа гарлаа';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -143,6 +147,16 @@ export const PaymentsPage = () => {
       <div className="admin-layout-content">
         <TopBar title="Төлбөрийн хяналт" />
         <main className="admin-main">
+          {error && (
+            <Card className="mb-6">
+              <div className="flex-between">
+                <div className="text-danger">{error}</div>
+                <Button variant="secondary" size="sm" onClick={loadData}>
+                  Дахин оролдох
+                </Button>
+              </div>
+            </Card>
+          )}
 
           {/* Stat cards */}
           <div className="grid grid-4 mb-6">

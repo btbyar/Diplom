@@ -25,6 +25,7 @@ export const AnalyticsPage = () => {
 
   const loadAnalyticsData = async () => {
     try {
+      setError('');
       const [bookingsRes, servicesRes, usersRes] = await Promise.all([
         bookingsAPI.getAll(),
         servicesAPI.getAll(),
@@ -33,9 +34,10 @@ export const AnalyticsPage = () => {
       setBookings(bookingsRes.data || []);
       setServices(servicesRes.data || []);
       setUsers(usersRes.data || []);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error loading analytics:', err);
-      setError('Failed to load analytics data');
+      const message = err.response?.data?.error || err.message || 'Шинжилгээний мэдээлэл ачаалахад алдаа гарлаа';
+      setError(message);
     }
   };
 
@@ -73,8 +75,13 @@ export const AnalyticsPage = () => {
         <TopBar title="Анализ ба Тайлан" />
         <main className="admin-main">
           {error && (
-            <Card>
-              <div className="text-center text-muted">{error}</div>
+            <Card className="mb-6">
+              <div className="flex-between">
+                <div className="text-danger">{error}</div>
+                <Button variant="secondary" size="sm" onClick={loadAnalyticsData}>
+                  Дахин оролдох
+                </Button>
+              </div>
             </Card>
           )}
 

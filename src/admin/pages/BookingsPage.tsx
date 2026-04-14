@@ -21,6 +21,7 @@ export const BookingsPage = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingBooking, setEditingBooking] = useState<Booking | null>(null);
   const [formData, setFormData] = useState<{
@@ -49,6 +50,7 @@ export const BookingsPage = () => {
   const loadData = async () => {
     try {
       setLoading(true);
+      setError('');
       const [bookingsRes, servicesRes, usersRes] = await Promise.all([
         bookingsAPI.getAll(),
         servicesAPI.getAll(),
@@ -57,8 +59,10 @@ export const BookingsPage = () => {
       setBookings(bookingsRes.data || []);
       setServices(servicesRes.data || []);
       setUsers(usersRes.data || []);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error loading data:', err);
+      const message = err.response?.data?.error || err.message || 'Захиалгын мэдээлэл ачаалахад алдаа гарлаа';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -178,6 +182,16 @@ export const BookingsPage = () => {
       <div className="admin-layout-content">
         <TopBar title="Захиалга удирдах" />
         <main className="admin-main">
+          {error && (
+            <Card className="mb-6">
+              <div className="flex-between">
+                <div className="text-danger">{error}</div>
+                <Button variant="secondary" size="sm" onClick={loadData}>
+                  Дахин оролдох
+                </Button>
+              </div>
+            </Card>
+          )}
           <Card
             title="Захиалгууд"
             headerAction={
