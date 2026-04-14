@@ -20,6 +20,7 @@
     "@types/jsonwebtoken": "^9.0.3",
     "@types/multer": "^2.1.0",
     "@types/node": "^20.19.39",
+    "@types/nodemailer": "^8.0.0",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.41.3",
@@ -35,7 +36,5 @@
     "typescript": "^5.1.6",
     "zod": "^3.22.4"
   },
-  "devDependencies": {
-    "@types/nodemailer": "^8.0.0"
-  }
+  "devDependencies": {}
 }
