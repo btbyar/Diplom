@@ -100,7 +100,7 @@ export const PartsPage: React.FC = () => {
     <div className="client-parts-page">
       <div className="page-header">
         <div className="container animate-slide-up">
-          <h1>Сэлбэгийн каталог</h1>
+          <h1>Сэлбэг</h1>
           <p>Бүх төрлийн машины баталгаат сэлбэгүүд</p>
         </div>
       </div>
@@ -200,7 +200,7 @@ export const PartsPage: React.FC = () => {
         </main>
       </div>
 
-      <PartModal 
+      <PartModal
         part={selectedPart}
         isOpen={!!selectedPart}
         onClose={() => setSelectedPart(null)}
