@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+import nodemailer from 'nodemailer';
 import { User } from '../models/User.js';
 
 export const authRoutes = Router();
@@ -111,13 +112,53 @@ authRoutes.post('/forgot-password', async (req: Request, res: Response) => {
 
     await user.save();
 
-    const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
+    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password/${resetToken}`;
     
-    // Simulate email send
-    console.log('\n=============================================');
-    console.log('ЭНЭ НЬ МЕЙЛЭЭР ЯВСАН ЛИНК ГЭЖ БОДНО (TESTING):');
-    console.log(`Нууц үг сэргээх линк: ${resetUrl}`);
-    console.log('=============================================\n');
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS
+        }
+      });
+
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Нууц үг сэргээх хүсэлт - Xpand Car Service',
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+            <h2 style="color: #0d274d; text-align: center;">Нууц үг сэргээх</h2>
+            <p>Сайн байна уу?</p>
+            <p>Таны бүртгэлээс нууц үг сэргээх хүсэлт ирлээ. Хэрэв та энэ хүсэлтийг гаргаагүй бол энэ имэйлийг үл тооно уу.</p>
+            <p>Нууц үгээ шинэчлэхийн тулд доорх товч дээр дарна уу:</p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${resetUrl}" style="background-color: #fca311; color: #0d274d; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">Нууц үг шинэчлэх</a>
+            </div>
+            <p>Энэхүү холбоос нь 1 цагийн дараа хүчингүй болно.</p>
+            <hr style="border: none; border-top: 1px solid #ccc; margin: 20px 0;" />
+            <p style="font-size: 12px; color: #666; text-align: center;">
+              Хүндэтгэсэн,<br/>
+              Xpand Car Service баг
+            </p>
+          </div>
+        `
+      };
+
+      try {
+        await transporter.sendMail(mailOptions);
+        console.log('Эмейл амжилттай илгээгдлээ:', email);
+      } catch (emailError) {
+        console.error('Email sending error:', emailError);
+      }
+    } else {
+      // Simulate email send (fallback when env is not set)
+      console.log('\n=============================================');
+      console.log('ЭНЭ НЬ МЕЙЛЭЭР ЯВСАН ЛИНК ГЭЖ БОДНО (TESTING):');
+      console.log(`Нууц үг сэргээх линк: ${resetUrl}`);
+      console.log('=============================================\n');
+    }
 
     res.json({ message: 'Сэргээх линк илгээгдлээ (хэрэв бүртгэлтэй бол)' });
 

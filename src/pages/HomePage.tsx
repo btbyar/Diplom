@@ -214,7 +214,7 @@ export const HomePage: React.FC = () => {
                   <div key={partId} className="part-card" onClick={() => setSelectedPart(part)} style={{ cursor: 'pointer' }}>
                     <div className="part-image">
                       {part.imageUrl ? (
-                        <img src={`${API_BASE}${part.imageUrl}`} alt={part.name} />
+                        <img src={part.imageUrl.startsWith('http') ? part.imageUrl : `${API_BASE}${part.imageUrl}`} alt={part.name} />
                       ) : (
                         <div className="no-image">
                           <FiTool size={32} />

@@ -39,7 +39,7 @@ export const PartModal: React.FC<PartModalProps> = ({ part, isOpen, onClose, onA
         <div className="part-modal-grid">
           <div className="part-modal-image">
             {part.imageUrl ? (
-              <img src={`${API_BASE}${part.imageUrl}`} alt={part.name} />
+              <img src={part.imageUrl.startsWith('http') ? part.imageUrl : `${API_BASE}${part.imageUrl}`} alt={part.name} />
             ) : (
               <div className="no-image">Зураггүй</div>
             )}
