@@ -13,9 +13,24 @@ const api = axios.create({
 // Request interceptor to add token
 api.interceptors.request.use((config) => {
   const isAdminPath = window?.location?.pathname?.startsWith('/admin');
-  const token = isAdminPath 
-    ? localStorage.getItem('admin_auth_token') 
-    : localStorage.getItem('auth_token');
+  
+  let token: string | null = null;
+  if (isAdminPath) {
+    // Zustand persist stores as JSON: { state: { token: "..." }, version: 0 }
+    const raw = localStorage.getItem('admin-auth-storage');
+    try {
+      token = raw ? JSON.parse(raw)?.state?.token : null;
+    } catch {
+      token = null;
+    }
+  } else {
+    const raw = localStorage.getItem('auth-storage');
+    try {
+      token = raw ? JSON.parse(raw)?.state?.token : null;
+    } catch {
+      token = null;
+    }
+  }
     
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
