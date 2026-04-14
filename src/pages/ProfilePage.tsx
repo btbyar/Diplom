@@ -279,6 +279,14 @@ export const ProfilePage: React.FC = () => {
                   <div key={b._id || b.id || i} className="booking-item">
                     <div className="booking-info">
                       <span className="booking-date">{b.date} {b.time}</span>
+                      {typeof b.serviceId === 'object' && b.serviceId && (
+                        <div style={{ marginTop: '5px', fontSize: '15px' }}>
+                          <strong>{(b.serviceId as any).name}</strong>
+                          <span style={{ color: 'var(--accent-primary)', marginLeft: '10px' }}>
+                            ₮{(b.serviceId as any).price?.toLocaleString()}
+                          </span>
+                        </div>
+                      )}
                     </div>
                     <span className={`booking-status status-${b.status}`}>
                       {STATUS_LABELS[b.status] ?? b.status}

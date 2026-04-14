@@ -10,7 +10,8 @@ bookingRoutes.get('/', authenticate, requireAdmin, async (_req: Request, res: Re
   try {
     const bookings = await Booking.find()
       .populate('userId', 'name email phone')
-      .populate('serviceId', 'name price duration');
+      .populate('serviceId', 'name price duration')
+      .sort({ createdAt: -1 });
     res.json(bookings);
   } catch (error: any) {
     console.error('Bookings авах алдаа:', error);

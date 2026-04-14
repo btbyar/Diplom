@@ -71,7 +71,7 @@ export const PartsPage = () => {
 
   const handleEdit = (part: Part) => {
     setEditingPart(part);
-    setImagePreview(part.imageUrl ? (part.imageUrl.startsWith('http') ? part.imageUrl : `${API_BASE}${part.imageUrl}`) : null);
+    setImagePreview(part.imageUrl ? (part.imageUrl.startsWith('http') ? part.imageUrl : `${API_BASE}${part.imageUrl.startsWith('/') ? '' : '/'}${part.imageUrl}`) : null);
     setFormData({
       name: part.name,
       partNumber: part.partNumber || '',
@@ -152,7 +152,7 @@ export const PartsPage = () => {
       render: (val: any) =>
         val ? (
           <img
-            src={val.startsWith('http') ? val : `${API_BASE}${val}`}
+            src={val.startsWith('http') ? val : `${API_BASE}${val.startsWith('/') ? '' : '/'}${val}`}
             alt="part"
             style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8, border: '1px solid #e5e7eb' }}
           />
