@@ -12,7 +12,14 @@ import { Table } from '../components/Table';
 import { TopBar } from '../components/TopBar';
 import '../styles/Layout.css';
 
-const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:3000';
+const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '').replace(/\/$/, '') || 'http://localhost:3000';
+
+const getImageUrl = (url: string) => {
+  if (!url) return '';
+  if (url.startsWith('http')) return url;
+  const cleanUrl = url.startsWith('/') ? url : `/${url}`;
+  return `${API_BASE}${cleanUrl}`;
+};
 
 export const PartsPage = () => {
   const navigate = useNavigate();
@@ -97,9 +104,11 @@ export const PartsPage = () => {
       const res = await uploadAPI.uploadImage(file);
       const url = res.data.url;
       setFormData((prev) => ({ ...prev, imageUrl: url }));
-      setImagePreview(url.startsWith('http') ? url : `${API_BASE}${url}`);
-    } catch (err) {
+      setImagePreview(getImageUrl(url));
+    } catch (err: any) {
       console.error('Image upload error:', err);
+      const message = err.response?.data?.error || err.message || 'Зураг байршуулахад алдаа гарлаа';
+      setError(message);
     } finally {
       setUploading(false);
     }
@@ -156,7 +165,7 @@ export const PartsPage = () => {
       render: (val: any) =>
         val ? (
           <img
-            src={val.startsWith('http') ? val : `${API_BASE}${val.startsWith('/') ? '' : '/'}${val}`}
+            src={getImageUrl(val)}
             alt="part"
             style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8, border: '1px solid #e5e7eb' }}
           />

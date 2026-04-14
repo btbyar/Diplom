@@ -9,7 +9,14 @@ import { Skeleton } from '../components/ui/Skeleton';
 import { PartModal } from '../components/parts/PartModal';
 import './PartsPage.css';
 
-const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:3000';
+const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '').replace(/\/$/, '') || 'http://localhost:3000';
+
+const getImageUrl = (url: string) => {
+  if (!url) return '';
+  if (url.startsWith('http')) return url;
+  const cleanUrl = url.startsWith('/') ? url : `/${url}`;
+  return `${API_BASE}${cleanUrl}`;
+};
 
 export const PartsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -161,7 +168,7 @@ export const PartsPage: React.FC = () => {
                     <div key={partId} className="part-card" onClick={() => setSelectedPart(part)} style={{ cursor: 'pointer' }}>
                       <div className="part-image">
                         {part.imageUrl ? (
-                          <img src={part.imageUrl.startsWith('http') ? part.imageUrl : `${API_BASE}${part.imageUrl.startsWith('/') ? '' : '/'}${part.imageUrl}`} alt={part.name} />
+                          <img src={getImageUrl(part.imageUrl)} alt={part.name} />
                         ) : (
                           <div className="no-image">Зураггүй</div>
                         )}

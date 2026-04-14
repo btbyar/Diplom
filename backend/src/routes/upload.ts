@@ -1,26 +1,26 @@
 import { Router, Request, Response } from 'express';
 import multer from 'multer';
-import { v2 as cloudinary } from 'cloudinary';
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import path from 'path';
+import fs from 'fs';
 import { authenticate, requireAdmin } from '../middleware/authMiddleware.js';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 export const uploadRoutes = Router();
 
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+// Ensure uploads directory exists
+const uploadsDir = path.resolve(process.cwd(), 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
 
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-        folder: 'xpand_car_service',
-        allowed_formats: ['jpg', 'png', 'jpeg', 'gif', 'webp'],
-    } as any,
+// Set up local storage
+const storage = multer.diskStorage({
+    destination: (_req, _file, cb) => {
+        cb(null, uploadsDir);
+    },
+    filename: (_req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
 });
 
 const upload = multer({ 
@@ -34,7 +34,7 @@ uploadRoutes.post('/', authenticate, requireAdmin, upload.single('image'), (req:
         return;
     }
     
-    // Cloudinary нь зурагны URL-ийг 'path' дотор буцаадаг
-    const url = req.file.path;
+    // Буцаах хаяг нь /uploads/ файл-нэр.jpg байна
+    const url = `/uploads/${req.file.filename}`;
     res.json({ url });
 });
