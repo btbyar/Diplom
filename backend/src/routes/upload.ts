@@ -15,7 +15,7 @@ cloudinary.config({
 
 // Cloudinary storage — зургийг шууд Cloudinary руу хадгална
 const storage = new CloudinaryStorage({
-  cloudinary,
+  cloudinary: cloudinary as any,
   params: {
     folder: 'car-service-parts',
     allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
