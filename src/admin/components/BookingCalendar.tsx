@@ -43,7 +43,7 @@ export const BookingCalendar = ({ bookings, onEdit, onDelete }: BookingCalendarP
   }, [bookings]);
 
   /* ─── calendar grid ─── */
-  const { cells, daysInMonth } = useMemo(() => {
+  const { cells } = useMemo(() => {
     const first = new Date(currentYear, currentMonth, 1);
     let dow = first.getDay();
     dow = dow === 0 ? 6 : dow - 1; // Mon = 0
