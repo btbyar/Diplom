@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useAdminAuthStore } from '../../store';
@@ -25,7 +25,6 @@ export const BookingsPage = () => {
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingBooking, setEditingBooking] = useState<Booking | null>(null);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'split' | 'list'>('split');
   const [formData, setFormData] = useState<{
     userId: string;
@@ -149,11 +148,6 @@ export const BookingsPage = () => {
     }
   };
 
-  // Filter bookings by selected date
-  const filteredBookings = useMemo(() => {
-    if (!selectedDate) return bookings;
-    return bookings.filter((b) => b.date && b.date.substring(0, 10) === selectedDate);
-  }, [bookings, selectedDate]);
 
   const columns = [
     {
@@ -202,135 +196,61 @@ export const BookingsPage = () => {
             </Card>
           )}
 
-          {/* View mode toggle + Add button */}
+          {/* Toolbar: view toggle + add button */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-            <div style={{ display: 'flex', gap: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '4px' }}>
+            <div style={{ display: 'flex', gap: '6px', background: 'rgba(255,255,255,0.04)', borderRadius: '12px', padding: '4px', border: '1px solid rgba(255,255,255,0.07)' }}>
               <button
                 onClick={() => setViewMode('split')}
                 style={{
-                  padding: '8px 16px',
-                  borderRadius: '8px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  background: viewMode === 'split' ? 'rgba(0,212,255,0.15)' : 'transparent',
-                  color: viewMode === 'split' ? '#00d4ff' : '#8892b0',
+                  padding: '8px 18px', borderRadius: '9px', border: 'none', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 600,
+                  background: viewMode === 'split' ? 'linear-gradient(135deg, rgba(0,212,255,0.18), rgba(99,102,241,0.15))' : 'transparent',
+                  color: viewMode === 'split' ? '#00d4ff' : '#4a5568',
+                  boxShadow: viewMode === 'split' ? '0 2px 8px rgba(0,212,255,0.15)' : 'none',
                   transition: 'all 0.2s',
                 }}
               >
                 <FiCalendar size={14} /> Календар
               </button>
               <button
-                onClick={() => { setViewMode('list'); setSelectedDate(null); }}
+                onClick={() => setViewMode('list')}
                 style={{
-                  padding: '8px 16px',
-                  borderRadius: '8px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  background: viewMode === 'list' ? 'rgba(0,212,255,0.15)' : 'transparent',
-                  color: viewMode === 'list' ? '#00d4ff' : '#8892b0',
+                  padding: '8px 18px', borderRadius: '9px', border: 'none', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 600,
+                  background: viewMode === 'list' ? 'linear-gradient(135deg, rgba(0,212,255,0.18), rgba(99,102,241,0.15))' : 'transparent',
+                  color: viewMode === 'list' ? '#00d4ff' : '#4a5568',
+                  boxShadow: viewMode === 'list' ? '0 2px 8px rgba(0,212,255,0.15)' : 'none',
                   transition: 'all 0.2s',
                 }}
               >
                 <FiList size={14} /> Жагсаалт
               </button>
             </div>
-            <Button
-              variant="primary"
-              size="sm"
-              icon={<FiPlus size={16} />}
-              onClick={handleAdd}
-            >
+            <Button variant="primary" size="sm" icon={<FiPlus size={16} />} onClick={handleAdd}>
               Шинэ захиалга
             </Button>
           </div>
 
-          {/* Split view: Calendar + Table side by side */}
+          {/* Calendar view — full width, edit/delete inside cards */}
           {viewMode === 'split' ? (
-            <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: '20px', alignItems: 'start' }}>
-              {/* Calendar */}
-              <BookingCalendar
-                bookings={bookings}
-                selectedDate={selectedDate}
-                onDaySelect={setSelectedDate}
-              />
-
-              {/* Bookings table */}
-              <Card
-                title={
-                  selectedDate
-                    ? `${selectedDate} — ${filteredBookings.length} захиалга`
-                    : `Бүх захиалга (${bookings.length})`
-                }
-                headerAction={
-                  selectedDate ? (
-                    <Button variant="secondary" size="sm" onClick={() => setSelectedDate(null)}>
-                      Шүүлтүүр арилгах
-                    </Button>
-                  ) : undefined
-                }
-              >
-                <Table
-                  columns={columns}
-                  data={filteredBookings}
-                  loading={loading}
-                  actions={(booking) => (
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        icon={<FiEdit2 size={14} />}
-                        onClick={() => handleEdit(booking)}
-                      >
-                        Засах
-                      </Button>
-                      <Button
-                        variant="danger"
-                        size="sm"
-                        icon={<FiTrash2 size={14} />}
-                        onClick={() => handleDelete(booking._id || booking.id || '')}
-                      >
-                        Устгах
-                      </Button>
-                    </div>
-                  )}
-                />
-              </Card>
-            </div>
+            <BookingCalendar
+              bookings={bookings}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
           ) : (
             /* List-only view */
-            <Card
-              title={`Бүх захиалга (${bookings.length})`}
-            >
+            <Card title={`Бүх захиалга (${bookings.length})`}>
               <Table
                 columns={columns}
                 data={bookings}
                 loading={loading}
                 actions={(booking) => (
                   <div style={{ display: 'flex', gap: '8px' }}>
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      icon={<FiEdit2 size={14} />}
-                      onClick={() => handleEdit(booking)}
-                    >
+                    <Button variant="secondary" size="sm" icon={<FiEdit2 size={14} />} onClick={() => handleEdit(booking)}>
                       Засах
                     </Button>
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      icon={<FiTrash2 size={14} />}
-                      onClick={() => handleDelete(booking._id || booking.id || '')}
-                    >
+                    <Button variant="danger" size="sm" icon={<FiTrash2 size={14} />} onClick={() => handleDelete(booking._id || booking.id || '')}>
                       Устгах
                     </Button>
                   </div>

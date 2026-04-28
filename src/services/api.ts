@@ -52,12 +52,14 @@ export const bookingsAPI = {
   getAll: () => api.get<Booking[]>('/bookings'),
   getMy: () => api.get<Booking[]>('/bookings/my/list'),
   getById: (id: string) => api.get<Booking>(`/bookings/${id}`),
+  getAvailableSlots: (date: string) => api.get<{ date: string; bookedSlots: string[] }>(`/bookings/available?date=${date}`),
   create: (booking: Omit<Booking, 'id' | 'createdAt'>) =>
     api.post<Booking>('/bookings', booking),
   update: (id: string, booking: Partial<Booking>) =>
     api.put<Booking>(`/bookings/${id}`, booking),
   delete: (id: string) => api.delete(`/bookings/${id}`),
 };
+
 
 // Services API
 export const servicesAPI = {

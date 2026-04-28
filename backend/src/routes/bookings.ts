@@ -5,6 +5,25 @@ import { authenticate, requireAdmin, AuthRequest } from '../middleware/authMiddl
 
 export const bookingRoutes = Router();
 
+// Public: get booked time slots for a given date (used by booking form)
+bookingRoutes.get('/available', async (req: Request, res: Response) => {
+  try {
+    const { date } = req.query;
+    if (!date || typeof date !== 'string') {
+      res.status(400).json({ error: 'date parameter required' });
+      return;
+    }
+    const taken = await Booking.find({
+      date,
+      status: { $nin: ['cancelled'] },
+    }).select('time');
+    const bookedSlots = taken.map(b => b.time);
+    res.json({ date, bookedSlots });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Сервер алдаа' });
+  }
+});
+
 // Admin: get all bookings
 bookingRoutes.get('/', authenticate, requireAdmin, async (_req: Request, res: Response) => {
   try {
@@ -18,6 +37,7 @@ bookingRoutes.get('/', authenticate, requireAdmin, async (_req: Request, res: Re
     res.status(500).json({ error: 'Сервер алдаа' });
   }
 });
+
 
 // Admin: get booking by id
 bookingRoutes.get('/:id', authenticate, async (req: Request, res: Response) => {
